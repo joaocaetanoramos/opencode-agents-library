@@ -37,7 +37,7 @@ validate_agent() {
         return 1
     fi
 
-    local mode=$(grep "^mode:" "$file" | cut -d' ' -f2)
+    local mode=$(grep -m 1 "^mode:" "$file" | cut -d' ' -f2)
     if [[ ! "$mode" =~ ^(primary|subagent|all)$ ]]; then
         echo "FAIL - Invalid mode: $mode"
         ERRORS=$((ERRORS + 1))
@@ -51,6 +51,11 @@ validate_agent() {
 echo ""
 echo "=== Agent Files ==="
 for agent in $(find "$AGENTS_DIR" -name "*.md" -type f 2>/dev/null); do
+    name=$(basename "$agent" .md)
+    if [[ "$name" == "STATUS" || "$name" == "CHANGELOG" ]]; then
+        echo "Skipping $name (development template)"
+        continue
+    fi
     validate_agent "$agent"
 done
 
@@ -72,6 +77,9 @@ echo "=== Schema Validation ==="
 if command -v jq &> /dev/null; then
     for agent in $(find "$AGENTS_DIR" -name "*.md" -type f 2>/dev/null); do
         name=$(basename "$agent" .md)
+        if [[ "$name" == "STATUS" || "$name" == "CHANGELOG" ]]; then
+            continue
+        fi
         echo "Validating $name against schema..."
 
         frontmatter=$(sed -n '/^---$/,/^---$/p' "$agent" | sed '1d;$d')

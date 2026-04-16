@@ -88,6 +88,23 @@ For detailed instructions on creating, developing, and versioning agents, see th
 
 ---
 
+### Creation
+
+**Path:** `src/agents/creation/`
+
+**Purpose:** Agent creation and generation following repository methodology.
+
+**Agents:**
+- `agent-generator` - Generates new agents with versioning support
+
+**Focus areas:**
+- Requirements analysis and agent design
+- Structured agent creation (STATUS.md, CHANGELOG.md, {agent}.md)
+- Following repository methodology
+- Validation and quality checks
+
+---
+
 ## Creating a New Domain
 
 For a complete step-by-step guide including templates and versioning strategy, see the [Development Guide](./DEVELOPMENT.md).

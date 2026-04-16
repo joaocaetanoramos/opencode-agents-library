@@ -27,6 +27,11 @@
       "path": "src/agents/exploration",
       "description": "Codebase exploration and search",
       "agents": []
+    },
+    "creation": {
+      "path": "src/agents/creation",
+      "description": "Agent creation and generation following repository methodology",
+      "agents": ["agent-generator"]
     }
   },
   "shared": {
