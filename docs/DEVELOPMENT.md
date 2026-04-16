@@ -18,6 +18,29 @@ This library uses a **versioned development approach** that allows you to track 
 
 ---
 
+## Development vs Installation
+
+This repository contains both **development files** and **agent files**:
+
+| File Type | Purpose | Install? |
+|-----------|---------|----------|
+| `{agent}.md` | Agent definition | YES - copy to `~/.config/opencode/agents/` |
+| `STATUS.md` | Development tracking | NO - repository only |
+| `CHANGELOG.md` | Version history | NO - repository only |
+| `releases/` | Previous versions | NO - repository only |
+
+### Correct Installation
+
+```bash
+# Correct - only the agent file
+cp src/agents/{domain}/{agent-name}.md ~/.config/opencode/agents/
+
+# Wrong - copying the whole folder includes non-agent files
+cp -r src/agents/{domain} ~/.config/opencode/agents/
+```
+
+---
+
 ## Development Workflow
 
 ### 1. Planning Phase
@@ -28,7 +51,7 @@ Create the agent structure:
 # Create domain directory
 mkdir -p src/agents/{domain}
 
-# Copy templates
+# Copy templates (for development tracking)
 cp src/shared/templates/STATUS.md src/agents/{domain}/
 cp src/shared/templates/CHANGELOG.md src/agents/{domain}/
 ```
@@ -42,16 +65,18 @@ Edit `STATUS.md`:
 
 Create the agent file: `src/agents/{domain}/{agent-name}.md`
 
-Follow the schema in `src/shared/configs/agent-schema.json`:
+**Important:** Use `permission` instead of the deprecated `tools` field.
 
 ```yaml
 ---
 description: Brief description of what the agent does
 mode: subagent  # or primary, all
-tools:
-  write: false
-  read: true
-  edit: false
+permission:
+  write: deny
+  edit: deny
+  bash:
+    "*": deny
+  webfetch: deny
 ---
 
 You are a {role}. Focus on:
@@ -67,14 +92,14 @@ Validate the agent:
 ./scripts/validate.sh
 ```
 
-Test the agent in OpenCode by linking it:
+Test the agent in OpenCode by linking only the agent file:
 
 ```bash
-# Global
-cp -r src/agents/{domain} ~/.config/opencode/agents/
+# Global (only the .md file)
+cp src/agents/{domain}/{agent-name}.md ~/.config/opencode/agents/
 
-# Project-specific
-cp -r src/agents/{domain} .opencode/agents/
+# Project-specific (only the .md file)
+cp src/agents/{domain}/{agent-name}.md .opencode/agents/
 ```
 
 ### 4. Releasing Phase
@@ -86,6 +111,30 @@ When ready to release:
 3. Update `agents.json` with new domain/agent
 4. Update `docs/DOMAINS.md`
 5. Commit and create PR
+
+---
+
+## Permission Reference
+
+OpenCode uses `permission` to control agent access. Use strings `"allow"`, `"deny"`, or `"ask"`:
+
+```yaml
+permission:
+  write: deny       # File creation
+  edit: deny        # File modification
+  bash: deny       # Shell commands (use patterns below)
+  webfetch: deny    # Web requests
+```
+
+### Bash Permissions with Patterns
+
+```yaml
+bash:
+  "*": deny           # Deny all by default
+  "git *": ask        # Ask for git commands
+  "grep *": allow     # Allow grep
+  "./scripts/*": allow # Allow scripts
+```
 
 ---
 
@@ -112,12 +161,12 @@ When releasing a new version:
 
 ```
 src/agents/{domain}/
-├── {agent-name}.md       # Current version
-├── STATUS.md            # Development status (next version)
-├── CHANGELOG.md         # Version history
-├── notes/               # Development notes
+├── {agent-name}.md       # Current version (INSTALL THIS)
+├── STATUS.md            # Development status (repository only)
+├── CHANGELOG.md         # Version history (repository only)
+├── notes/               # Development notes (repository only)
 │   └── {YYYY-MM-DD}.md
-└── releases/           # Previous versions
+└── releases/           # Previous versions (repository only)
     └── v1/
         ├── {agent-name}.md
         └── notes/
@@ -170,12 +219,16 @@ These directories exist but contain no agents yet.
 - Follow [SOLID principles](./ARCHITECTURE.md#design-principles)
 - Single responsibility per agent
 - Clear, descriptive identifier (kebab-case)
-- Appropriate permission restrictions
+- Use `permission` (not deprecated `tools`)
 
 ### Version Control
 - Commit `STATUS.md` changes regularly
 - Document all design decisions in `CHANGELOG.md`
 - Keep notes for future reference
+
+### Installation
+- Only copy `{agent}.md` files to `~/.config/opencode/agents/`
+- Do NOT copy STATUS.md, CHANGELOG.md, or other development files
 
 ### Testing
 - Always run `./scripts/validate.sh`
@@ -189,8 +242,8 @@ These directories exist but contain no agents yet.
 | Task | Command |
 |------|---------|
 | Validate agents | `./scripts/validate.sh` |
-| Link globally | `cp -r src/agents/* ~/.config/opencode/agents/` |
-| Link project | `cp -r src/agents/* .opencode/agents/` |
+| Install agent globally | `cp src/agents/{domain}/{agent}.md ~/.config/opencode/agents/` |
+| Install agent project | `cp src/agents/{domain}/{agent}.md .opencode/agents/` |
 
 ---
 

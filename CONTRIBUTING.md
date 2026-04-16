@@ -28,15 +28,17 @@ For detailed instructions on creating, developing, and versioning agents, see th
    touch src/agents/[domain]/[agent-name].md
    ```
 
-3. **Follow the agent schema:**
+3. **Follow the agent schema (use `permission`, not `tools`):**
    ```yaml
    ---
    description: Clear description of what the agent does
    mode: subagent  # or 'primary' or 'all'
-   tools:
-     write: false
-     edit: false
-     bash: false
+   permission:
+     write: deny
+     edit: deny
+     bash:
+       "*": deny
+     webfetch: deny
    ---
 
    You are a [role]. Focus on:
@@ -85,7 +87,7 @@ For detailed instructions on creating, developing, and versioning agents, see th
 
 - [ ] Description is 10-200 characters
 - [ ] Mode is valid (`primary`, `subagent`, or `all`)
-- [ ] Tools are explicitly set (not relying on defaults)
+- [ ] Permissions use "allow/deny/ask" (not boolean true/false)
 - [ ] Prompt is clear and specific
 - [ ] Agent follows Single Responsibility Principle
 - [ ] Validation script passes

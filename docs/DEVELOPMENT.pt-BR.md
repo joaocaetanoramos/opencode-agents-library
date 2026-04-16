@@ -18,6 +18,29 @@ Esta biblioteca usa uma **abordagem de desenvolvimento versionada** que permite 
 
 ---
 
+## Desenvolvimento vs Instalação
+
+Este repositório contém tanto **arquivos de desenvolvimento** quanto **arquivos de agente**:
+
+| Tipo de Arquivo | Propósito | Instalar? |
+|----------------|-----------|-----------|
+| `{agente}.md` | Definição do agente | SIM - copie para `~/.config/opencode/agents/` |
+| `STATUS.md` | Acompanhamento de desenvolvimento | NÃO - só no repositório |
+| `CHANGELOG.md` | Histórico de versões | NÃO - só no repositório |
+| `releases/` | Versões anteriores | NÃO - só no repositório |
+
+### Instalação Correta
+
+```bash
+# Correto - apenas o arquivo do agente
+cp src/agents/{dominio}/{agente}.md ~/.config/opencode/agents/
+
+# Errado - copiar toda a pasta inclui arquivos não-agente
+cp -r src/agents/{dominio} ~/.config/opencode/agents/
+```
+
+---
+
 ## Fluxo de Desenvolvimento
 
 ### 1. Fase de Planejamento
@@ -28,7 +51,7 @@ Crie a estrutura do agente:
 # Criar diretório do domínio
 mkdir -p src/agents/{dominio}
 
-# Copiar templates
+# Copiar templates (para acompanhamento de desenvolvimento)
 cp src/shared/templates/STATUS.md src/agents/{dominio}/
 cp src/shared/templates/CHANGELOG.md src/agents/{dominio}/
 ```
@@ -42,16 +65,18 @@ Edite o `STATUS.md`:
 
 Crie o arquivo do agente: `src/agents/{dominio}/{nome-agente}.md`
 
-Siga o schema em `src/shared/configs/agent-schema.json`:
+**Importante:** Use `permission` em vez do campo `tools` (deprecated).
 
 ```yaml
 ---
 description: Breve descrição do que o agente faz
 mode: subagent  # ou primary, all
-tools:
-  write: false
-  read: true
-  edit: false
+permission:
+  write: deny
+  edit: deny
+  bash:
+    "*": deny
+  webfetch: deny
 ---
 
 You are a {role}. Focus on:
@@ -67,14 +92,14 @@ Valide o agente:
 ./scripts/validate.sh
 ```
 
-Teste o agente no OpenCode linkando-o:
+Teste o agente no OpenCode linkando apenas o arquivo do agente:
 
 ```bash
-# Global
-cp -r src/agents/{dominio} ~/.config/opencode/agents/
+# Global (apenas o arquivo .md)
+cp src/agents/{dominio}/{agente}.md ~/.config/opencode/agents/
 
-# Projeto específico
-cp -r src/agents/{dominio} .opencode/agents/
+# Projeto específico (apenas o arquivo .md)
+cp src/agents/{dominio}/{agente}.md .opencode/agents/
 ```
 
 ### 4. Fase de Lançamento
@@ -86,6 +111,30 @@ Quando pronto para lançar:
 3. Atualize `agents.json` com novo domínio/agente
 4. Atualize `docs/DOMAINS.md`
 5. Commit e crie PR
+
+---
+
+## Referência de Permissões
+
+O OpenCode usa `permission` para controlar o acesso do agente. Use strings `"allow"`, `"deny"`, ou `"ask"`:
+
+```yaml
+permission:
+  write: deny       # Criação de arquivos
+  edit: deny        # Modificação de arquivos
+  bash: deny       # Comandos shell (use padrões abaixo)
+  webfetch: deny   # Requisições web
+```
+
+### Permissões de Bash com Padrões
+
+```yaml
+bash:
+  "*": deny           # Negar todos por padrão
+  "git *": ask        # Perguntar para comandos git
+  "grep *": allow     # Permitir grep
+  "./scripts/*": allow # Permitir scripts
+```
 
 ---
 
@@ -112,12 +161,12 @@ Ao lançar uma nova versão:
 
 ```
 src/agents/{dominio}/
-├── {agente}.md         # Versão atual
-├── STATUS.md           # Status do desenvolvimento (próxima versão)
-├── CHANGELOG.md       # Histórico de versões
-├── notes/              # Notas de desenvolvimento
+├── {agente}.md         # Versão atual (INSTALE ESTE)
+├── STATUS.md           # Status do desenvolvimento (só repositório)
+├── CHANGELOG.md       # Histórico de versões (só repositório)
+├── notes/              # Notas de desenvolvimento (só repositório)
 │   └── {YYYY-MM-DD}.md
-└── releases/           # Versões anteriores
+└── releases/           # Versões anteriores (só repositório)
     └── v1/
         ├── {agente}.md
         └── notes/
@@ -170,12 +219,16 @@ Estes diretórios existem mas ainda não contêm agentes.
 - Siga os [princípios SOLID](./ARCHITECTURE.md#design-principles)
 - Responsabilidade única por agente
 - Identificador claro (kebab-case)
-- Restrições de permissão apropriadas
+- Use `permission` (não `tools` que está deprecated)
 
 ### Controle de Versão
 - Commit alterações no `STATUS.md` regularmente
 - Documente todas as decisões de design no `CHANGELOG.md`
 - Mantenha notas para referência futura
+
+### Instalação
+- Apenas copie arquivos `{agente}.md` para `~/.config/opencode/agents/`
+- NÃO copie STATUS.md, CHANGELOG.md ou outros arquivos de desenvolvimento
 
 ### Testes
 - Sempre execute `./scripts/validate.sh`
@@ -189,8 +242,8 @@ Estes diretórios existem mas ainda não contêm agentes.
 | Tarefa | Comando |
 |--------|---------|
 | Validar agentes | `./scripts/validate.sh` |
-| Link global | `cp -r src/agents/* ~/.config/opencode/agents/` |
-| Link projeto | `cp -r src/agents/* .opencode/agents/` |
+| Instalar agente globalmente | `cp src/agents/{dominio}/{agente}.md ~/.config/opencode/agents/` |
+| Instalar agente no projeto | `cp src/agents/{dominio}/{agente}.md .opencode/agents/` |
 
 ---
 

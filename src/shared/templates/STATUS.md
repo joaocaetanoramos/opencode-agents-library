@@ -1,5 +1,8 @@
 # {agent-name} - Development Status
 
+> **⚠️ DEVELOPMENT FILE** - This file is for development tracking only.
+> Do NOT install this file in OpenCode. Only install `{agent-name}.md`.
+
 ## Agent Info
 - **Domain:** {domain}
 - **Agent File:** {agent-name}.md

@@ -1,5 +1,8 @@
 # {agent-name} - Changelog
 
+> **⚠️ DEVELOPMENT FILE** - This file is for version history only.
+> Do NOT install this file in OpenCode. Only install `{agent-name}.md`.
+
 All notable changes to this agent are documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
