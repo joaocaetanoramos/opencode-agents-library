@@ -12,7 +12,7 @@ Uma coleção curada de agentes personalizados para o [OpenCode](https://opencod
 
 1. Clone o repositório:
 ```bash
-git clone https://github.com/joaoramos/opencode-agents-library.git
+git clone https://github.com/joaocaetanoramos/opencode-agents-library.git
 cd opencode-agents-library
 ```
 

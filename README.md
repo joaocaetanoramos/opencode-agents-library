@@ -12,7 +12,7 @@ A curated collection of custom agents for [OpenCode](https://opencode.ai), organ
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/joaoramos/opencode-agents-library.git
+git clone https://github.com/joaocaetanoramos/opencode-agents-library.git
 cd opencode-agents-library
 ```
 
