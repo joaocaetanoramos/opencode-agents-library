@@ -61,9 +61,11 @@ opencode-agents-library/
 │   │   └── code-review/
 │   ├── shared/              # Shared prompts and configs
 │   │   ├── prompts/
-│   │   └── configs/
+│   │   ├── configs/
+│   │   └── templates/       # Development templates
 │   └── scripts/             # Utility scripts
 ├── docs/                    # Documentation
+├── reference/               # External reference materials
 ├── .github/                 # GitHub workflows
 └── agents.json             # Agent index
 ```
@@ -72,13 +74,14 @@ opencode-agents-library/
 
 ## Adding New Agents
 
-See [DOMAINS.md](docs/DOMAINS.md) for detailed instructions.
+See [Development Guide](docs/DEVELOPMENT.md) for complete instructions on creating, developing, and versioning agents.
 
-**Summary:**
+**Quick Summary:**
 1. Create agent file in `src/agents/[domain]/[agent-name].md`
 2. Follow the schema in `src/shared/configs/agent-schema.json`
-3. Update `agents.json` with new domain/agent
-4. Run `scripts/validate.sh` to verify
+3. Use `STATUS.md` and `CHANGELOG.md` to track development
+4. Update `agents.json` with new domain/agent
+5. Run `scripts/validate.sh` to verify
 
 ---
 

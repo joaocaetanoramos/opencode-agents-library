@@ -14,9 +14,15 @@ The OpenCode Agents Library follows modular architecture principles, enabling ea
 opencode-agents-library/
 ├── src/
 │   ├── agents/           # Domain-specific agents
+│   │   └── [domain]/     # Each domain has its own folder
 │   ├── shared/           # Reusable components
+│   │   ├── prompts/      # Shared prompt templates
+│   │   ├── configs/      # Schema and validation
+│   │   └── templates/    # Development templates (STATUS.md, CHANGELOG.md)
 │   └── scripts/          # Automation
 ├── docs/                 # Documentation
+├── reference/            # External reference materials
+│   └── opencode-internal/ # OpenCode built-in agent reference
 └── .github/              # CI/CD
 ```
 
@@ -73,6 +79,11 @@ tools: {...}
 System prompt content...
 ```
 
+Each domain folder may also contain:
+- `STATUS.md` - Development tracking for upcoming version
+- `CHANGELOG.md` - Version history
+- `releases/` - Previous released versions
+
 ### Shared Prompts (`src/shared/prompts/`)
 
 Reusable prompt templates referenced by agents:
@@ -83,6 +94,14 @@ Reusable prompt templates referenced by agents:
 
 Schema and validation configurations:
 - `agent-schema.json` - JSON Schema for validation
+
+### Development Templates (`src/shared/templates/`)
+
+Templates for agent development:
+- `STATUS.md` - Development progress tracking
+- `CHANGELOG.md` - Version history template
+
+See [Development Guide](./DEVELOPMENT.md) for usage.
 
 ### Scripts (`src/scripts/`)
 
@@ -127,6 +146,18 @@ Loads agent configuration
     ↓
 Executes with specified tools/permissions
 ```
+
+---
+
+## Agent Lifecycle
+
+Agents follow a development lifecycle:
+
+```
+Planning → Drafting → Testing → Released → (Enhancements) → v2.0
+```
+
+For detailed versioning strategy and development workflow, see the [Development Guide](./DEVELOPMENT.md).
 
 ---
 

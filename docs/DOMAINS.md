@@ -6,6 +6,12 @@ This document describes the domain organization and how to extend it.
 
 ---
 
+## Development Guide
+
+For detailed instructions on creating, developing, and versioning agents, see the [Development Guide](./DEVELOPMENT.md).
+
+---
+
 ## Existing Domains
 
 ### Security
@@ -84,57 +90,22 @@ This document describes the domain organization and how to extend it.
 
 ## Creating a New Domain
 
-### Step 1: Create Directory
+For a complete step-by-step guide including templates and versioning strategy, see the [Development Guide](./DEVELOPMENT.md).
 
+### Quick Start
+
+1. Create directory and copy templates:
 ```bash
 mkdir -p src/agents/[new-domain]
+cp src/shared/templates/STATUS.md src/agents/[new-domain]/
+cp src/shared/templates/CHANGELOG.md src/agents/[new-domain]/
 ```
 
-### Step 2: Create Agent Files
+2. Edit `STATUS.md` and create your agent file
 
-At least one agent required per domain.
+3. Update `agents.json` with domain entry
 
-```bash
-touch src/agents/[new-domain]/example-agent.md
-```
-
-### Step 3: Define Agent
-
-Follow the schema in `src/shared/configs/agent-schema.json`:
-
-```yaml
----
-description: Clear description of agent purpose
-mode: subagent
-tools:
-  write: false
-  edit: false
-  bash: false
----
-
-You are a [role description]. Focus on:
-- [Capability 1]
-- [Capability 2]
-```
-
-### Step 4: Update agents.json
-
-Add entry to the `domains` object:
-
-```json
-"[new-domain]": {
-  "path": "src/agents/[new-domain]",
-  "description": "Domain purpose",
-  "agents": ["example-agent"]
-}
-```
-
-### Step 5: Document Domain
-
-Add section to this file following the existing format.
-
-### Step 6: Validate
-
+4. Validate:
 ```bash
 ./scripts/validate.sh
 ```

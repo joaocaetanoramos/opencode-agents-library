@@ -6,21 +6,29 @@ Thank you for your interest in contributing!
 
 ---
 
-## How to Contribute
+## Development Guide
+
+For detailed instructions on creating, developing, and versioning agents, see the [Development Guide](./docs/DEVELOPMENT.md).
+
+---
+
+## Quick Reference
 
 ### Adding a New Agent
 
-1. **Create the agent file:**
+1. **Create directory and use templates:**
    ```bash
-   # For a new domain
-   mkdir -p src/agents/[new-domain]
-   touch src/agents/[new-domain]/[agent-name].md
-
-   # For existing domain
-   touch src/agents/[existing-domain]/[agent-name].md
+   mkdir -p src/agents/[domain]
+   cp src/shared/templates/STATUS.md src/agents/[domain]/
+   cp src/shared/templates/CHANGELOG.md src/agents/[domain]/
    ```
 
-2. **Follow the agent schema:**
+2. **Create the agent file:**
+   ```bash
+   touch src/agents/[domain]/[agent-name].md
+   ```
+
+3. **Follow the agent schema:**
    ```yaml
    ---
    description: Clear description of what the agent does
@@ -36,21 +44,21 @@ Thank you for your interest in contributing!
    - [Specific capability 2]
    ```
 
-3. **Validate:**
+4. **Validate:**
    ```bash
    ./scripts/validate.sh
    ```
 
-4. **Update `agents.json`:**
+5. **Update `agents.json`:**
    - Add new domain if created
    - Add agent to domain's agent list
 
 ### Adding a New Domain
 
 1. Create directory: `src/agents/[new-domain]/`
-2. Add at least one agent
+2. Copy templates and create agent
 3. Update `agents.json` with domain entry
-4. Create documentation section in `docs/DOMAINS.md`
+4. Update documentation in `docs/DOMAINS.md`
 5. Submit PR
 
 ---
