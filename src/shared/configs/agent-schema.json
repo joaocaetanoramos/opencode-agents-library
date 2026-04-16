@@ -1,0 +1,105 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://opencode.ai/agents-library/schema/agent-schema.json",
+  "title": "OpenCode Agent Schema",
+  "description": "Schema for validating OpenCode custom agents",
+  "type": "object",
+  "required": ["description", "mode"],
+  "properties": {
+    "description": {
+      "type": "string",
+      "minLength": 10,
+      "maxLength": 200,
+      "description": "Brief description of the agent's purpose"
+    },
+    "mode": {
+      "type": "string",
+      "enum": ["primary", "subagent", "all"],
+      "description": "How the agent can be used"
+    },
+    "model": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9_-]+/[a-zA-Z0-9_-]+$",
+      "description": "Provider/model identifier"
+    },
+    "temperature": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Response creativity level"
+    },
+    "top_p": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Alternative to temperature for diversity"
+    },
+    "steps": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100,
+      "description": "Max agentic iterations before forced text response"
+    },
+    "prompt": {
+      "type": "string",
+      "description": "Path to custom prompt file"
+    },
+    "disable": {
+      "type": "boolean",
+      "default": false
+    },
+    "hidden": {
+      "type": "boolean",
+      "default": false,
+      "description": "Hide from @ autocomplete menu"
+    },
+    "color": {
+      "type": "string",
+      "pattern": "^#[0-9A-Fa-f]{6}$|^primary$|^secondary$|^accent$|^success$|^warning$|^error$|^info$",
+      "description": "UI color for the agent"
+    },
+    "tools": {
+      "type": "object",
+      "properties": {
+        "write": { "type": "boolean" },
+        "edit": { "type": "boolean" },
+        "bash": { "type": "boolean" },
+        "read": { "type": "boolean" },
+        "grep": { "type": "boolean" },
+        "glob": { "type": "boolean" },
+        "webfetch": { "type": "boolean" }
+      },
+      "additionalProperties": true
+    },
+    "permission": {
+      "type": "object",
+      "properties": {
+        "edit": {
+          "oneOf": [
+            { "type": "string", "enum": ["allow", "ask", "deny"] },
+            { "type": "object" }
+          ]
+        },
+        "bash": {
+          "oneOf": [
+            { "type": "string", "enum": ["allow", "ask", "deny"] },
+            { "type": "object" }
+          ]
+        },
+        "webfetch": {
+          "type": "string",
+          "enum": ["allow", "ask", "deny"]
+        },
+        "task": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "enum": ["allow", "ask", "deny"]
+          }
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

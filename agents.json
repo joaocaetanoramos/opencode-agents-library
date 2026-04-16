@@ -1,0 +1,36 @@
+{
+  "$schema": "./src/shared/configs/agent-schema.json",
+  "version": "1.0.0",
+  "lastUpdated": "2026-04-16",
+  "domains": {
+    "security": {
+      "path": "src/agents/security",
+      "description": "Security auditing and vulnerability detection",
+      "agents": ["security-auditor"]
+    },
+    "documentation": {
+      "path": "src/agents/documentation",
+      "description": "Documentation generation and maintenance",
+      "agents": ["docs-writer"]
+    },
+    "code-review": {
+      "path": "src/agents/code-review",
+      "description": "Code quality and best practices review",
+      "agents": ["code-reviewer"]
+    },
+    "debug": {
+      "path": "src/agents/debug",
+      "description": "Debugging and investigation",
+      "agents": []
+    },
+    "exploration": {
+      "path": "src/agents/exploration",
+      "description": "Codebase exploration and search",
+      "agents": []
+    }
+  },
+  "shared": {
+    "prompts": "src/shared/prompts",
+    "configs": "src/shared/configs"
+  }
+}
