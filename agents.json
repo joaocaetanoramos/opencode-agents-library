@@ -1,7 +1,7 @@
 {
   "$schema": "./src/shared/configs/agent-schema.json",
   "version": "1.0.0",
-  "lastUpdated": "2026-04-16",
+  "lastUpdated": "2026-04-17",
   "domains": {
     "security": {
       "path": "src/agents/security",
@@ -15,8 +15,18 @@
     },
     "code-review": {
       "path": "src/agents/code-review",
-      "description": "Code quality and best practices review",
-      "agents": ["code-reviewer"]
+      "description": "Code quality, SDD compliance and best practices review",
+      "agents": ["sdd-compliance", "code-reviewer"]
+    },
+    "planning": {
+      "path": "src/agents/planning",
+      "description": "Requirements analysis and architecture planning",
+      "agents": ["architect"]
+    },
+    "coding": {
+      "path": "src/agents/coding",
+      "description": "Code generation and test creation",
+      "agents": ["code-generator"]
     },
     "debug": {
       "path": "src/agents/debug",
@@ -32,6 +42,20 @@
       "path": "src/agents/creation",
       "description": "Agent creation and generation following repository methodology",
       "agents": ["agent-generator"]
+    },
+    "teams": {
+      "path": "src/agents/teams",
+      "description": "Pre-configured agent teams with team leaders",
+      "agents": []
+    }
+  },
+  "teams": {
+    "saas": {
+      "path": "src/agents/teams/saas",
+      "team_leader": "saas-project-generator",
+      "team_file": "saas.team.md",
+      "description": "Complete SaaS project development team",
+      "agents": ["architect", "code-generator", "sdd-compliance"]
     }
   },
   "shared": {

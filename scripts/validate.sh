@@ -56,6 +56,14 @@ for agent in $(find "$AGENTS_DIR" -name "*.md" -type f 2>/dev/null); do
         echo "Skipping $name (development template)"
         continue
     fi
+    if [[ "$agent" == *"docs/"* || "$agent" == *"/docs/"* ]]; then
+        echo "Skipping $name (documentation)"
+        continue
+    fi
+    if [[ "$agent" == *".team.md" ]]; then
+        echo "Skipping $name (team file)"
+        continue
+    fi
     validate_agent "$agent"
 done
 
@@ -78,6 +86,12 @@ if command -v jq &> /dev/null; then
     for agent in $(find "$AGENTS_DIR" -name "*.md" -type f 2>/dev/null); do
         name=$(basename "$agent" .md)
         if [[ "$name" == "STATUS" || "$name" == "CHANGELOG" ]]; then
+            continue
+        fi
+        if [[ "$agent" == *"docs/"* || "$agent" == *"/docs/"* ]]; then
+            continue
+        fi
+        if [[ "$agent" == *".team.md" ]]; then
             continue
         fi
         echo "Validating $name against schema..."

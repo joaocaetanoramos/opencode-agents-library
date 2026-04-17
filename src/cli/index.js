@@ -9,6 +9,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const REPO_ROOT = path.resolve(__dirname, '../..');
 const AGENTS_SOURCE = `${REPO_ROOT}/src/agents`;
+const TEAMS_SOURCE = `${REPO_ROOT}/src/agents/teams`;
 
 const HOME = process.env.HOME || '/root';
 const GLOBAL_DIR = `${HOME}/.config/opencode/agents`;
@@ -89,6 +90,131 @@ function getInstalledAgents() {
   }
 
   return installed;
+}
+
+function getAvailableTeams() {
+  const teams = [];
+  if (!fs.existsSync(TEAMS_SOURCE)) return teams;
+
+  const teamDirs = fs.readdirSync(TEAMS_SOURCE, { withFileTypes: true });
+  for (const teamDir of teamDirs) {
+    if (!teamDir.isDirectory()) continue;
+    const teamPath = path.join(TEAMS_SOURCE, teamDir.name);
+    const teamFile = path.join(teamPath, `${teamDir.name}.team.md`);
+
+    if (fs.existsSync(teamFile)) {
+      const teamContent = fs.readFileSync(teamFile, 'utf-8');
+      const descMatch = teamContent.match(/description:\s*(.+)/);
+
+      teams.push({
+        name: teamDir.name,
+        path: teamPath,
+        teamFile: teamFile,
+        description: descMatch ? descMatch[1].trim() : 'No description'
+      });
+    }
+  }
+  return teams;
+}
+
+async function installTeam(teamName, options = {}) {
+  const teams = getAvailableTeams();
+  const team = teams.find(t => t.name === teamName);
+
+  if (!team) {
+    log.error(`Team '${teamName}' not found`);
+    return 1;
+  }
+
+  const agentsJsonPath = path.join(REPO_ROOT, 'agents.json');
+  let agentsConfig = {};
+  if (fs.existsSync(agentsJsonPath)) {
+    agentsConfig = JSON.parse(fs.readFileSync(agentsJsonPath, 'utf-8'));
+  }
+
+  const teamConfig = agentsConfig.teams?.[teamName];
+  if (!teamConfig) {
+    log.error(`Team '${teamName}' not configured in agents.json`);
+    return 1;
+  }
+
+  const targetDir = options.global ? GLOBAL_DIR : PROJECT_DIR;
+  ensureDir(targetDir);
+
+  console.log('');
+  log.info(`Installing team '${teamName}' to ${options.global ? 'global' : 'project'}...`);
+  console.log('');
+
+  let success = 0;
+  let failed = 0;
+
+  const leaderSource = path.join(teamConfig.path, `${teamConfig.team_leader}.md`);
+  const leaderTarget = path.join(targetDir, `${teamConfig.team_leader}.md`);
+
+  if (fs.existsSync(leaderSource)) {
+    if (createSymlink(leaderSource, leaderTarget)) {
+      log.ok(`${teamConfig.team_leader} (team leader)`);
+      success++;
+    } else {
+      log.error(`${teamConfig.team_leader} (team leader)`);
+      failed++;
+    }
+  }
+
+  if (teamConfig.agents && Array.isArray(teamConfig.agents)) {
+    for (const agentName of teamConfig.agents) {
+      let agentPath = null;
+      let agentDomain = null;
+
+      for (const [domain, config] of Object.entries(agentsConfig.domains)) {
+        if (config.agents && config.agents.includes(agentName)) {
+          agentPath = path.join(REPO_ROOT, config.path, `${agentName}.md`);
+          agentDomain = domain;
+          break;
+        }
+      }
+
+      if (agentPath && fs.existsSync(agentPath)) {
+        const agentTarget = path.join(targetDir, `${agentName}.md`);
+        if (createSymlink(agentPath, agentTarget)) {
+          log.ok(`${agentName} (${agentDomain})`);
+          success++;
+        } else {
+          log.error(`${agentName}`);
+          failed++;
+        }
+      } else {
+        log.error(`${agentName} (source not found)`);
+        failed++;
+      }
+    }
+  }
+
+  console.log('');
+  log.info(`Team '${teamName}' installed: ${success} | Failed: ${failed}`);
+  return failed > 0 ? 1 : 0;
+}
+
+function listTeams() {
+  const teams = getAvailableTeams();
+
+  if (teams.length === 0) {
+    log.info('No teams found');
+    return 0;
+  }
+
+  console.log('');
+  console.log(`${BOLD}AVAILABLE TEAMS${RESET}`);
+  console.log('─'.repeat(58));
+
+  for (const team of teams) {
+    console.log(`  ${BOLD}${team.name}${RESET}`);
+    console.log(`    ${team.description}`);
+    console.log('');
+  }
+
+  console.log(`Total teams: ${teams.length}`);
+  return 0;
 }
 
 function createSymlink(source, target) {
@@ -391,8 +517,14 @@ ${CYAN}Commands:${RESET}
   install    Install agents (interactive or specified)
   remove     Remove installed agents
   list       List all available and installed agents
+  team       Team management (list, install)
   check      Check OpenCode status
   help       Show this help message
+
+${CYAN}Team Commands:${RESET}
+  agents-cli team list                  # List available teams
+  agents-cli team install <name>        # Install a team
+  agents-cli team install <name> -g     # Install to global
 
 ${CYAN}Options:${RESET}
   --global, -g    Install to global directory
@@ -409,11 +541,16 @@ ${CYAN}Examples:${RESET}
   agents-cli install -g -a code-reviewer docs-writer
   agents-cli remove --agent security-auditor
   agents-cli list
-  agents-cli check
+  agents-cli team list
+  agents-cli team install saas
+  agents-cli team install saas -g
 
 ${CYAN}Agent Paths:${RESET}
   Global:  ${GLOBAL_DIR}
   Project: ${PROJECT_DIR}
+
+${CYAN}Teams:${RESET}
+  Teams install a team leader + all required agents at once
 `);
 }
 
@@ -425,8 +562,10 @@ async function interactive() {
   const actions = [
     { name: 'Install agents (global)', value: 'install-global', icon: '🌐' },
     { name: 'Install agents (project)', value: 'install-project', icon: '📁' },
+    { name: 'Install team', value: 'install-team', icon: '👥' },
     { name: 'Remove agents', value: 'remove', icon: '🗑️' },
     { name: 'List installed agents', value: 'list', icon: '📋' },
+    { name: 'List available teams', value: 'list-teams', icon: '👥' },
     { name: 'Check OpenCode status', value: 'check', icon: '🔍' },
     new inquirer.Separator(),
     { name: 'Exit', value: 'exit', icon: '👋' }
@@ -457,11 +596,40 @@ async function interactive() {
       case 'install-project':
         await installAgentsProject();
         break;
+      case 'install-team':
+        {
+          const teams = getAvailableTeams();
+          if (teams.length === 0) {
+            log.info('No teams available');
+            break;
+          }
+          const choices = teams.map(t => ({
+            name: `${t.name} - ${t.description}`,
+            value: t.name
+          }));
+          const { selectedTeam } = await inquirer.prompt([{
+            type: 'list',
+            name: 'selectedTeam',
+            message: 'Select team to install',
+            choices: choices
+          }]);
+          const { isGlobal } = await inquirer.prompt([{
+            type: 'confirm',
+            name: 'isGlobal',
+            message: 'Install to global directory?',
+            default: false
+          }]);
+          await installTeam(selectedTeam, { global: isGlobal });
+        }
+        break;
       case 'remove':
         await removeAgents();
         break;
       case 'list':
         listAgents();
+        break;
+      case 'list-teams':
+        listTeams();
         break;
       case 'check':
         checkOpenCode();
@@ -621,6 +789,29 @@ ${CYAN}Examples:${RESET}
 
   if (command === 'check') {
     return checkOpenCode();
+  }
+
+  if (command === 'team') {
+    const teamArgs = subArgs;
+    if (teamArgs.length === 0 || teamArgs[0] === 'list') {
+      return listTeams();
+    }
+
+    if (teamArgs[0] === 'install') {
+      const installArgs = teamArgs.slice(1);
+      if (installArgs.length === 0) {
+        log.error('Team name required: agents-cli team install <team-name>');
+        return 1;
+      }
+
+      const teamName = installArgs[0];
+      const options = { global: installArgs.includes('--global') || installArgs.includes('-g') };
+
+      return await installTeam(teamName, options);
+    }
+
+    log.error(`Unknown team command: ${teamArgs[0]}`);
+    return 1;
   }
 
   log.error(`Unknown command: ${command}`);
