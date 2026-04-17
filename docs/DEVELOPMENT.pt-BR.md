@@ -24,19 +24,23 @@ Este repositório contém tanto **arquivos de desenvolvimento** quanto **arquivo
 
 | Tipo de Arquivo | Propósito | Instalar? |
 |----------------|-----------|-----------|
-| `{agente}.md` | Definição do agente | SIM - copie para `~/.config/opencode/agents/` |
+| `{agente}.md` | Definição do agente | SIM - instale via CLI ou symlink |
 | `STATUS.md` | Acompanhamento de desenvolvimento | NÃO - só no repositório |
 | `CHANGELOG.md` | Histórico de versões | NÃO - só no repositório |
 | `releases/` | Versões anteriores | NÃO - só no repositório |
 
-### Instalação Correta
+### Instalação
 
+**Usando CLI (Recomendado):**
 ```bash
-# Correto - apenas o arquivo do agente
-cp src/agents/{dominio}/{agente}.md ~/.config/opencode/agents/
+cd cli
+npm install
+node install.js
+```
 
-# Errado - copiar toda a pasta inclui arquivos não-agente
-cp -r src/agents/{dominio} ~/.config/opencode/agents/
+**Manual (symlink):**
+```bash
+ln -sf $(pwd)/src/agents/{domínio}/{agente}.md ~/.config/opencode/agents/
 ```
 
 ---
@@ -49,11 +53,11 @@ Crie a estrutura do agente:
 
 ```bash
 # Criar diretório do domínio
-mkdir -p src/agents/{dominio}
+mkdir -p src/agents/{domínio}
 
 # Copiar templates (para acompanhamento de desenvolvimento)
-cp src/shared/templates/STATUS.md src/agents/{dominio}/
-cp src/shared/templates/CHANGELOG.md src/agents/{dominio}/
+cp src/shared/templates/STATUS.md src/agents/{domínio}/
+cp src/shared/templates/CHANGELOG.md src/agents/{domínio}/
 ```
 
 Edite o `STATUS.md`:
@@ -63,7 +67,7 @@ Edite o `STATUS.md`:
 
 ### 2. Fase de Rascunho
 
-Crie o arquivo do agente: `src/agents/{dominio}/{nome-agente}.md`
+Crie o arquivo do agente: `src/agents/{domínio}/{nome-agente}.md`
 
 **Importante:** Use `permission` em vez do campo `tools` (deprecated).
 
@@ -92,14 +96,14 @@ Valide o agente:
 ./scripts/validate.sh
 ```
 
-Teste o agente no OpenCode linkando apenas o arquivo do agente:
+Teste o agente no OpenCode linkando o arquivo do agente:
 
 ```bash
-# Global (apenas o arquivo .md)
-cp src/agents/{dominio}/{agente}.md ~/.config/opencode/agents/
+# Global
+ln -sf $(pwd)/src/agents/{domínio}/{agente}.md ~/.config/opencode/agents/
 
-# Projeto específico (apenas o arquivo .md)
-cp src/agents/{dominio}/{agente}.md .opencode/agents/
+# Projeto específico
+ln -sf $(pwd)/src/agents/{domínio}/{agente}.md .opencode/agents/
 ```
 
 ### 4. Fase de Lançamento
@@ -142,7 +146,7 @@ bash:
 
 ### Versionamento Semântico
 
-Versões dos agentes seguem [SemVer](https://semver.org/):
+Versões dos agentes seguem [SemVer](https://semver.org):
 
 - **Major (v1.0 → v2.0):** Mudanças quebrativas
 - **Minor (v1.0 → v1.1):** Novas funcionalidades, retrocompatível
@@ -160,7 +164,7 @@ Ao lançar uma nova versão:
 ### Estrutura Completa de Lançamento
 
 ```
-src/agents/{dominio}/
+src/agents/{domínio}/
 ├── {agente}.md         # Versão atual (INSTALE ESTE)
 ├── STATUS.md           # Status do desenvolvimento (só repositório)
 ├── CHANGELOG.md       # Histórico de versões (só repositório)
@@ -184,8 +188,8 @@ Quando quiser melhorar um agente existente:
 
 2. ** Preserve o histórico:**
    ```bash
-   mkdir -p src/agents/{dominio}/releases/v1
-   cp src/agents/{dominio}/{agente}.md src/agents/{dominio}/releases/v1/
+   mkdir -p src/agents/{domínio}/releases/v1
+   cp src/agents/{domínio}/{agente}.md src/agents/{domínio}/releases/v1/
    ```
 
 3. **Documente decisões:**
@@ -227,7 +231,8 @@ Estes diretórios existem mas ainda não contêm agentes.
 - Mantenha notas para referência futura
 
 ### Instalação
-- Apenas copie arquivos `{agente}.md` para `~/.config/opencode/agents/`
+- Use o CLI para instalar agentes (gerencia symlinks automaticamente)
+- Ou crie symlinks manualmente: `ln -sf source target`
 - NÃO copie STATUS.md, CHANGELOG.md ou outros arquivos de desenvolvimento
 
 ### Testes
@@ -241,9 +246,10 @@ Estes diretórios existem mas ainda não contêm agentes.
 
 | Tarefa | Comando |
 |--------|---------|
+| Instalar agentes (CLI) | `cd cli && npm install && node install.js` |
 | Validar agentes | `./scripts/validate.sh` |
-| Instalar agente globalmente | `cp src/agents/{dominio}/{agente}.md ~/.config/opencode/agents/` |
-| Instalar agente no projeto | `cp src/agents/{dominio}/{agente}.md .opencode/agents/` |
+| Instalar agente globalmente (symlink) | `ln -sf src/agents/{domínio}/{agente}.md ~/.config/opencode/agents/` |
+| Instalar agente no projeto (symlink) | `ln -sf src/agents/{domínio}/{agente}.md .opencode/agents/` |
 
 ---
 

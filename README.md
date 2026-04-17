@@ -16,17 +16,16 @@ git clone https://github.com/joaocaetanoramos/opencode-agents-library.git
 cd opencode-agents-library
 ```
 
-2. Link agents to your OpenCode config:
-
-**Global installation (per agent):**
+2. Install and run the CLI:
 ```bash
-cp src/agents/{domain}/{agent}.md ~/.config/opencode/agents/
+cd cli
+npm install
+node install.js
 ```
 
-**Project-specific (per agent):**
-```bash
-cp src/agents/{domain}/{agent}.md .opencode/agents/
-```
+3. Select agents to install via the interactive menu:
+   - **Install (global)** - Available for all projects
+   - **Install (project)** - Available only in current project
 
 ### Usage
 
@@ -38,6 +37,25 @@ After installation, invoke agents via `@mention`:
 @code-reviewer analyze this PR
 @agent-generator create a new agent
 ```
+
+---
+
+### CLI Manager
+
+The interactive CLI provides:
+
+- **Install agents (global)** - Create symlinks in `~/.config/opencode/agents/`
+- **Install agents (project)** - Create symlinks in `.opencode/agents/`
+- **Remove agents** - Remove symlinks from global/project
+- **List installed agents** - Show which agents are installed where
+- **Check OpenCode status** - Detect if OpenCode is running
+
+The CLI uses **symlinks** instead of copying files:
+- Agents are always up-to-date with the repository
+- Just run `git pull` to update all agents
+- No backup needed
+
+See [cli/README.md](cli/README.md) for details.
 
 ---
 
@@ -56,15 +74,7 @@ After installation, invoke agents via `@mention`:
 
 This repository contains **development files** (STATUS.md, CHANGELOG.md) and **agent files**.
 
-**Only install the `.md` agent files:**
-
-```bash
-# Correct
-cp src/agents/security/security-auditor.md ~/.config/opencode/agents/
-
-# Wrong - copies development files too
-cp -r src/agents/security ~/.config/opencode/agents/
-```
+**Only install the `.md` agent files** - the CLI handles this automatically.
 
 ---
 
@@ -81,26 +91,29 @@ opencode-agents-library/
 │   ├── shared/              # Shared prompts and configs
 │   │   ├── prompts/
 │   │   ├── configs/
-│   │   └── templates/       # Development templates (STATUS.md, CHANGELOG.md)
+│   │   └── templates/       # Development templates
 │   └── scripts/             # Utility scripts
+├── cli/                     # CLI manager (Node.js)
+│   ├── install.js           # Entry point
+│   └── package.json
 ├── docs/                    # Documentation
-├── reference/               # External reference materials
+├── reference/              # External reference materials
 ├── .github/                 # GitHub workflows
-└── agents.json             # Agent index
+└── agents.json              # Agent index
 ```
 
 ---
 
 ## Creating New Agents
 
-See [Development Guide](docs/DEVELOPMENT.md) for complete instructions on creating, developing, and versioning agents.
+See [Development Guide](docs/DEVELOPMENT.md) for complete instructions.
 
 **Quick Summary:**
 1. Use `@agent-generator create a new agent` to get started
 2. Or manually create `src/agents/[domain]/[agent-name].md`
 3. Follow the `permission` schema (not deprecated `tools`)
 4. Use `STATUS.md` and `CHANGELOG.md` to track development
-5. Run `scripts/validate.sh` to verify
+5. Run `./scripts/validate.sh` to verify
 
 ---
 

@@ -14,9 +14,16 @@ A Biblioteca de Agentes OpenCode segue princípios de arquitetura modular, permi
 opencode-agents-library/
 ├── src/
 │   ├── agents/           # Agentes específicos por domínio
+│   │   └── [domínio]/     # Cada domínio tem sua própria pasta
 │   ├── shared/           # Componentes reutilizáveis
+│   │   ├── prompts/       # Templates de prompt compartilhados
+│   │   ├── configs/       # Schema e validação
+│   │   └── templates/    # Templates de desenvolvimento (STATUS.md, CHANGELOG.md)
 │   └── scripts/          # Automação
+├── cli/                  # CLI manager (Node.js)
 ├── docs/                 # Documentação
+├── reference/            # Materiais de referência
+│   └── opencode-internal/ # Referência de agentes internos do OpenCode
 └── .github/              # CI/CD
 ```
 
@@ -67,11 +74,16 @@ Cada agente é um arquivo Markdown com YAML frontmatter.
 ---
 description: Obrigatório
 mode: subagent|primary|all
-tools: {...}
+permission: {...}
 ---
 
 Conteúdo do prompt do sistema...
 ```
+
+Cada pasta de domínio também pode conter:
+- `STATUS.md` - Acompanhamento de desenvolvimento da próxima versão
+- `CHANGELOG.md` - Histórico de versões
+- `releases/` - Versões lançadas anteriormente
 
 ### Prompts Compartilhados (`src/shared/prompts/`)
 
@@ -84,10 +96,27 @@ Templates de prompt reutilizáveis referenciados por agentes:
 Schema e configurações de validação:
 - `agent-schema.json` - JSON Schema para validação
 
+### Templates de Desenvolvimento (`src/shared/templates/`)
+
+Templates para desenvolvimento de agentes:
+- `STATUS.md` - Acompanhamento de progresso de desenvolvimento
+- `CHANGELOG.md` - Template de histórico de versões
+
+Consulte o [Guia de Desenvolvimento](./DEVELOPMENT.md) para uso.
+
 ### Scripts (`src/scripts/`)
 
 Utilitários de automação:
 - `validate.sh` - Valida todos os agentes contra o schema
+
+### CLI (`cli/`)
+
+Ferramenta CLI interativa para gerenciamento de agentes:
+- `install.js` - Ponto de entrada usando Node.js + Inquirer
+- Usa symlinks ao invés de copiar arquivos
+- Agentes permanecem atualizados com o repositório
+
+Consulte [cli/README.md](../cli/README.md) para detalhes.
 
 ---
 
@@ -95,10 +124,11 @@ Utilitários de automação:
 
 | Extensão | Localização | Processo |
 |---------|------------|---------|
-| Novo domínio | `src/agents/[dominio]/` | Criar pasta + agente |
-| Novo agente | `src/agents/[dominio]/[agente].md` | Seguir schema |
+| Novo domínio | `src/agents/[domínio]/` | Criar pasta + agente |
+| Novo agente | `src/agents/[domínio]/[agente].md` | Seguir schema |
 | Novo prompt | `src/shared/prompts/[nome].md` | Referenciar no agente |
 | Nova validação | `src/scripts/` | Adicionar ao validate.sh |
+| CLI Manager | `cli/` | Editar install.js |
 
 ---
 
@@ -127,6 +157,18 @@ Carrega configuração do agente
     ↓
 Executa com ferramentas/permissões especificadas
 ```
+
+---
+
+## Ciclo de Vida do Agente
+
+Agentes seguem um ciclo de desenvolvimento:
+
+```
+Planejamento → Rascunho → Testes → Lançado → (Melhorias) → v2.0
+```
+
+Para estratégia detalhada de versionamento e fluxo de desenvolvimento, consulte o [Guia de Desenvolvimento](./DEVELOPMENT.md).
 
 ---
 

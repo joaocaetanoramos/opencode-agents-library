@@ -24,19 +24,23 @@ This repository contains both **development files** and **agent files**:
 
 | File Type | Purpose | Install? |
 |-----------|---------|----------|
-| `{agent}.md` | Agent definition | YES - copy to `~/.config/opencode/agents/` |
+| `{agent}.md` | Agent definition | YES - install via CLI or symlink |
 | `STATUS.md` | Development tracking | NO - repository only |
 | `CHANGELOG.md` | Version history | NO - repository only |
 | `releases/` | Previous versions | NO - repository only |
 
-### Correct Installation
+### Installation
 
+**Using CLI (Recommended):**
 ```bash
-# Correct - only the agent file
-cp src/agents/{domain}/{agent-name}.md ~/.config/opencode/agents/
+cd cli
+npm install
+node install.js
+```
 
-# Wrong - copying the whole folder includes non-agent files
-cp -r src/agents/{domain} ~/.config/opencode/agents/
+**Manual (symlink):**
+```bash
+ln -sf $(pwd)/src/agents/{domain}/{agent}.md ~/.config/opencode/agents/
 ```
 
 ---
@@ -92,14 +96,14 @@ Validate the agent:
 ./scripts/validate.sh
 ```
 
-Test the agent in OpenCode by linking only the agent file:
+Test the agent in OpenCode by linking the agent file:
 
 ```bash
-# Global (only the .md file)
-cp src/agents/{domain}/{agent-name}.md ~/.config/opencode/agents/
+# Global
+ln -sf $(pwd)/src/agents/{domain}/{agent}.md ~/.config/opencode/agents/
 
-# Project-specific (only the .md file)
-cp src/agents/{domain}/{agent-name}.md .opencode/agents/
+# Project-specific
+ln -sf $(pwd)/src/agents/{domain}/{agent}.md .opencode/agents/
 ```
 
 ### 4. Releasing Phase
@@ -142,7 +146,7 @@ bash:
 
 ### Semantic Versioning
 
-Agent versions follow [SemVer](https://semver.org/):
+Agent versions follow [SemVer](https://semver.org):
 
 - **Major (v1.0 → v2.0):** Breaking changes
 - **Minor (v1.0 → v1.1):** New features, backward compatible
@@ -227,7 +231,8 @@ These directories exist but contain no agents yet.
 - Keep notes for future reference
 
 ### Installation
-- Only copy `{agent}.md` files to `~/.config/opencode/agents/`
+- Use the CLI to install agents (handles symlinks automatically)
+- Or manually create symlinks: `ln -sf source target`
 - Do NOT copy STATUS.md, CHANGELOG.md, or other development files
 
 ### Testing
@@ -241,9 +246,10 @@ These directories exist but contain no agents yet.
 
 | Task | Command |
 |------|---------|
+| Install agents (CLI) | `cd cli && npm install && node install.js` |
 | Validate agents | `./scripts/validate.sh` |
-| Install agent globally | `cp src/agents/{domain}/{agent}.md ~/.config/opencode/agents/` |
-| Install agent project | `cp src/agents/{domain}/{agent}.md .opencode/agents/` |
+| Install agent globally (symlink) | `ln -sf src/agents/{domain}/{agent}.md ~/.config/opencode/agents/` |
+| Install agent project (symlink) | `ln -sf src/agents/{domain}/{agent}.md .opencode/agents/` |
 
 ---
 

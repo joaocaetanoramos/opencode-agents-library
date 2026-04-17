@@ -16,17 +16,16 @@ git clone https://github.com/joaocaetanoramos/opencode-agents-library.git
 cd opencode-agents-library
 ```
 
-2. Vincule os agentes à sua configuração do OpenCode:
-
-**Instalação global (por agente):**
+2. Instale e execute o CLI:
 ```bash
-cp src/agents/{dominio}/{agente}.md ~/.config/opencode/agents/
+cd cli
+npm install
+node install.js
 ```
 
-**Específico por projeto (por agente):**
-```bash
-cp src/agents/{dominio}/{agente}.md .opencode/agents/
-```
+3. Selecione os agentes para instalar através do menu interativo:
+   - **Install (global)** - Disponível para todos os projetos
+   - **Install (project)** - Disponível apenas no projeto atual
 
 ### Uso
 
@@ -38,6 +37,25 @@ Após a instalação, invoque agentes via `@mention`:
 @code-reviewer analise este PR
 @agent-generator crie um novo agente
 ```
+
+---
+
+### CLI Manager
+
+O CLI interativo fornece:
+
+- **Install agents (global)** - Cria symlinks em `~/.config/opencode/agents/`
+- **Install agents (project)** - Cria symlinks em `.opencode/agents/`
+- **Remove agents** - Remove symlinks de global/projeto
+- **List installed agents** - Mostra quais agentes estão instalados onde
+- **Check OpenCode status** - Detecta se o OpenCode está rodando
+
+O CLI usa **symlinks** ao invés de copiar arquivos:
+- Agentes estão sempre atualizados com o repositório
+- Basta executar `git pull` para atualizar todos os agentes
+- Não precisa de backup
+
+Consulte [cli/README.md](cli/README.md) para detalhes.
 
 ---
 
@@ -56,15 +74,7 @@ Após a instalação, invoque agentes via `@mention`:
 
 Este repositório contém **arquivos de desenvolvimento** (STATUS.md, CHANGELOG.md) e **arquivos de agente**.
 
-**Apenas instale os arquivos `.md` de agente:**
-
-```bash
-# Correto
-cp src/agents/security/security-auditor.md ~/.config/opencode/agents/
-
-# Errado - copia arquivos de desenvolvimento também
-cp -r src/agents/security ~/.config/opencode/agents/
-```
+**Apenas instale os arquivos `.md` de agente** - o CLI faz isso automaticamente.
 
 ---
 
@@ -81,11 +91,14 @@ opencode-agents-library/
 │   ├── shared/              # Prompts e configurações compartilhados
 │   │   ├── prompts/
 │   │   ├── configs/
-│   │   └── templates/       # Templates de desenvolvimento (STATUS.md, CHANGELOG.md)
+│   │   └── templates/       # Templates de desenvolvimento
 │   └── scripts/             # Scripts utilitários
+├── cli/                     # CLI manager (Node.js)
+│   ├── install.js           # Ponto de entrada
+│   └── package.json
 ├── docs/                    # Documentação
-├── reference/               # Materiais de referência
-├── .github/                 # Workflows do GitHub
+├── reference/              # Materiais de referência
+├── .github/                # Workflows do GitHub
 └── agents.json              # Índice de agentes
 ```
 
@@ -93,14 +106,14 @@ opencode-agents-library/
 
 ## Criando Novos Agentes
 
-Consulte [Development Guide](docs/DEVELOPMENT.md) para instruções completas de criação, desenvolvimento e versionamento de agentes.
+Consulte [Development Guide](docs/DEVELOPMENT.md) para instruções completas.
 
 **Resumo:**
 1. Use `@agent-generator crie um novo agente` para começar
 2. Ou crie manualmente `src/agents/[domínio]/[nome-do-agente].md`
 3. Siga o schema `permission` (não o deprecated `tools`)
 4. Use `STATUS.md` e `CHANGELOG.md` para acompanhar o desenvolvimento
-5. Execute `scripts/validate.sh` para verificar
+5. Execute `./scripts/validate.sh` para verificar
 
 ---
 

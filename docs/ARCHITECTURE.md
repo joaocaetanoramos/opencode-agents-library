@@ -20,6 +20,7 @@ opencode-agents-library/
 │   │   ├── configs/      # Schema and validation
 │   │   └── templates/    # Development templates (STATUS.md, CHANGELOG.md)
 │   └── scripts/          # Automation
+├── cli/                  # CLI manager (Node.js)
 ├── docs/                 # Documentation
 ├── reference/            # External reference materials
 │   └── opencode-internal/ # OpenCode built-in agent reference
@@ -73,7 +74,7 @@ Each agent is a Markdown file with YAML frontmatter.
 ---
 description: Required
 mode: subagent|primary|all
-tools: {...}
+permission: {...}
 ---
 
 System prompt content...
@@ -108,6 +109,15 @@ See [Development Guide](./DEVELOPMENT.md) for usage.
 Automation utilities:
 - `validate.sh` - Validates all agents against schema
 
+### CLI (`cli/`)
+
+Interactive CLI tool for agent management:
+- `install.js` - Entry point using Node.js + Inquirer
+- Uses symlinks instead of copying files
+- Agents stay up-to-date with repository
+
+See [cli/README.md](../cli/README.md) for details.
+
 ---
 
 ## Extension Points
@@ -118,6 +128,7 @@ Automation utilities:
 | New agent | `src/agents/[domain]/[agent].md` | Follow schema |
 | New prompt | `src/shared/prompts/[name].md` | Reference in agent |
 | New validation | `src/scripts/` | Add to validate.sh |
+| CLI Manager | `cli/` | Edit install.js |
 
 ---
 
