@@ -13,7 +13,7 @@
 ## Current Version
 
 ### Version
-🟡 **v0.1** - Drafting
+🟢 **v0.2** - Testing
 
 ### Status Legend
 - 🔴 Planning - Defining requirements and approach
@@ -27,17 +27,21 @@
 
 | Agent | Purpose | Status |
 |-------|---------|--------|
-| `architect` | Analyzes requirements, selects stack, generates SDD | 🟡 Drafting |
-| `requirements-analyzer` | Gathers and refines requirements | 🔴 Future |
+| `architect` | Analyzes requirements, selects stack, generates SDD | 🟢 Testing |
+| `requirements-analyzer` | Gathers and refines requirements | 🟡 Drafting |
 
 ---
 
 ## Roadmap
 
+### Version v0.2
+- [x] Create `requirements-analyzer.md` stub
+- [x] Create `requirements-analyzer.md` full implementation
+- [ ] Test with team leaders
+
 ### Version v0.1
 - [x] Define architect agent purpose
-- [ ] Create architect.md with generic SDD generation
-- [ ] Create requirements-analyzer stub
+- [x] Create architect.md with generic SDD generation
 - [ ] Test with team leaders
 
 ### Future Versions

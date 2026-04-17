@@ -8,6 +8,13 @@ All notable changes to this domain are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v0.2] - 2026-04-17
+
+### Added
+- `test-generator.md` - Generates comprehensive unit and integration tests
+
+---
+
 ## [v0.1] - 2026-04-17
 
 ### Added

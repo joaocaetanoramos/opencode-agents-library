@@ -13,7 +13,7 @@
 ## Current Version
 
 ### Version
-🟡 **v0.1** - Drafting
+🟢 **v0.2** - Testing
 
 ### Status Legend
 - 🔴 Planning - Defining requirements and approach
@@ -27,17 +27,21 @@
 
 | Agent | Purpose | Status |
 |-------|---------|--------|
-| `code-generator` | Generates code from SDD | 🟡 Drafting |
-| `test-generator` | Generates tests | 🔴 Future |
+| `code-generator` | Generates code from SDD | 🟢 Testing |
+| `test-generator` | Generates comprehensive tests | 🟡 Drafting |
 
 ---
 
 ## Roadmap
 
+### Version v0.2
+- [x] Create `test-generator.md` stub
+- [x] Create `test-generator.md` full implementation
+- [ ] Test with team leaders
+
 ### Version v0.1
 - [x] Define code-generator agent purpose
-- [ ] Create code-generator.md with generic implementation
-- [ ] Create test-generator stub
+- [x] Create code-generator.md with generic implementation
 - [ ] Test with team leaders
 
 ### Future Versions

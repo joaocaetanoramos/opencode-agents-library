@@ -19,8 +19,10 @@ This team file defines the composition and workflow for the SaaS project develop
 
 | Agent | Domain | Purpose |
 |-------|--------|---------|
+| `requirements-analyzer` | planning | Gathers and refines user requirements |
 | `architect` | planning | Analyzes requirements, generates SDD |
 | `code-generator` | coding | Generates code from SDD |
+| `test-generator` | coding | Generates comprehensive tests |
 | `sdd-compliance` | code-review | Validates code against SDD |
 
 ## Workflow
@@ -31,21 +33,26 @@ User
   ▼
 saas-project-generator (Team Leader)
   │
-  ├──► architect ──────────► SDD
+  ├──► requirements-analyzer ───► Requirements Document
   │
-  ├──► code-generator ─────► Code
+  ├──► architect ──────────────► SDD
   │
-  └──► sdd-compliance ──────► Validation Report
+  ├──► code-generator ─────────► Code
+  │
+  ├──► test-generator ─────────► Tests
+  │
+  └──► sdd-compliance ─────────► Validation Report
 ```
 
 ### Phases
 
 | Phase | Agent | Output |
 |-------|-------|--------|
-| 1. Interview | (team leader) | Requirements |
+| 1. Interview | (team leader) / requirements-analyzer | Requirements Document |
 | 2. Architecture | `architect` | Software Design Document |
 | 3. Implementation | `code-generator` | Project files |
-| 4. Validation | `sdd-compliance` | Validation report |
+| 4. Testing | `test-generator` | Test suite |
+| 5. Validation | `sdd-compliance` | Validation report |
 
 ## Installation
 
@@ -55,8 +62,10 @@ opencode team install saas
 
 # This will install:
 # - saas-project-generator (team leader)
+# - requirements-analyzer (from planning/)
 # - architect (from planning/)
 # - code-generator (from coding/)
+# - test-generator (from coding/)
 # - sdd-compliance (from code-review/)
 ```
 
@@ -70,8 +79,10 @@ opencode team install saas
 - `src/agents/teams/saas/docs/available-tools.md`
 
 ### Modular Agents
+- `src/agents/planning/requirements-analyzer.md`
 - `src/agents/planning/architect.md`
 - `src/agents/coding/code-generator.md`
+- `src/agents/coding/test-generator.md`
 - `src/agents/code-review/sdd-compliance.md`
 
 ## Settings

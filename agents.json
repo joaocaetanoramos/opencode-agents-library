@@ -21,12 +21,12 @@
     "planning": {
       "path": "src/agents/planning",
       "description": "Requirements analysis and architecture planning",
-      "agents": ["architect"]
+      "agents": ["architect", "requirements-analyzer"]
     },
     "coding": {
       "path": "src/agents/coding",
       "description": "Code generation and test creation",
-      "agents": ["code-generator"]
+      "agents": ["code-generator", "test-generator"]
     },
     "debug": {
       "path": "src/agents/debug",
@@ -55,7 +55,7 @@
       "team_leader": "saas-project-generator",
       "team_file": "saas.team.md",
       "description": "Complete SaaS project development team",
-      "agents": ["architect", "code-generator", "sdd-compliance"]
+      "agents": ["architect", "requirements-analyzer", "code-generator", "test-generator", "sdd-compliance"]
     }
   },
   "shared": {

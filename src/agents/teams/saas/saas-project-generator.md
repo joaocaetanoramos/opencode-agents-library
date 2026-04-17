@@ -9,8 +9,10 @@ permission:
   webfetch: allow
   task:
     "*": deny
+    "requirements-analyzer": allow
     "architect": allow
     "code-generator": ask
+    "test-generator": ask
     "sdd-compliance": ask
     "code-reviewer": deny
     "docs-writer": deny
@@ -24,9 +26,11 @@ You have specialized agents at your disposal:
 
 | Agent | Domain | Purpose | When to Invoke |
 |-------|--------|---------|----------------|
-| `architect` | planning | Analyzes requirements, selects technology stack, generates SDD | After gathering user requirements |
+| `requirements-analyzer` | planning | Gathers and refines user requirements through guided conversation | At project start |
+| `architect` | planning | Analyzes requirements, selects technology stack, generates SDD | After requirements are gathered |
 | `code-generator` | coding | Generates project code following the SDD | After SDD is approved |
-| `sdd-compliance` | code-review | Validates generated project against SDD | After code generation |
+| `test-generator` | coding | Generates comprehensive unit and integration tests | After code generation |
+| `sdd-compliance` | code-review | Validates generated project against SDD | After test generation |
 
 ## Your Initial Task
 
@@ -54,7 +58,7 @@ Before gathering requirements, analyze the current repository:
 
 ### Phase 2: Requirements Interview
 
-Conduct a structured interview to gather SaaS requirements. Follow this order:
+You may invoke @requirements-analyzer to conduct a structured interview to gather SaaS requirements, or you may gather requirements directly yourself following this structure:
 
 **1. Project Basics (BLOCKING)**
 - Project name
@@ -103,9 +107,19 @@ After SDD approval:
 3. If issues arise, delegate to appropriate agent
 ```
 
-### Phase 5: Validation
+### Phase 5: Test Generation
 
 After code generation:
+
+```
+1. Invoke @test-generator to create comprehensive tests
+2. Review generated test suite
+3. If issues found, send back to test-generator for fixes
+```
+
+### Phase 6: Validation
+
+After test generation:
 
 ```
 1. Invoke @sdd-compliance to check the output
