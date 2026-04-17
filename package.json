@@ -1,0 +1,27 @@
+{
+  "name": "opencode-agents",
+  "version": "1.0.0",
+  "description": "CLI tool to manage OpenCode agents",
+  "type": "module",
+  "bin": {
+    "agents-cli": "./bin/agents.js"
+  },
+  "scripts": {
+    "start": "node bin/agents.js",
+    "cli": "node bin/agents.js"
+  },
+  "dependencies": {
+    "inquirer": "^9.2.0"
+  },
+  "keywords": [
+    "opencode",
+    "agents",
+    "cli"
+  ],
+  "author": "Joao Carlos",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/joaocaetanoramos/opencode-agents-library"
+  }
+}

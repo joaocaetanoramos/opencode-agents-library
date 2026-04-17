@@ -16,46 +16,63 @@ git clone https://github.com/joaocaetanoramos/opencode-agents-library.git
 cd opencode-agents-library
 ```
 
-2. Instale e execute o CLI:
+2. Vincule o CLI globalmente:
 ```bash
-cd cli
-npm install
-node install.js
+npm link
 ```
 
-3. Selecione os agentes para instalar através do menu interativo:
-   - **Install (global)** - Disponível para todos os projetos
-   - **Install (project)** - Disponível apenas no projeto atual
-
-### Uso
-
-Após a instalação, invoque agentes via `@mention`:
-
+3. Use de qualquer projeto:
+```bash
+agents-cli install -g -a code-reviewer docs-writer
 ```
-@security-auditor revise este código para vulnerabilidades
-@docs-writer gere documentação da API
-@code-reviewer analise este PR
-@agent-generator crie um novo agente
+
+### Modo Interativo
+
+Execute sem argumentos para menu interativo:
+```bash
+agents-cli
 ```
 
 ---
 
-### CLI Manager
+## Uso do CLI
 
-O CLI interativo fornece:
+### Comandos
 
-- **Install agents (global)** - Cria symlinks em `~/.config/opencode/agents/`
-- **Install agents (project)** - Cria symlinks em `.opencode/agents/`
-- **Remove agents** - Remove symlinks de global/projeto
-- **List installed agents** - Mostra quais agentes estão instalados onde
-- **Check OpenCode status** - Detecta se o OpenCode está rodando
+| Comando | Descrição |
+|---------|-----------|
+| `agents-cli install` | Instalar agentes (interativo ou especificado) |
+| `agents-cli remove` | Remover agentes instalados |
+| `agents-cli list` | Listar todos os agentes disponíveis e instalados |
+| `agents-cli check` | Verificar status do OpenCode |
+| `agents-cli help` | Mostrar ajuda |
+
+### Opções
+
+| Opção | Descrição |
+|-------|-----------|
+| `-g, --global` | Instalar no diretório global |
+| `-p, --project` | Instalar no diretório do projeto |
+| `-a, --agent` | Especificar nome(s) do(s) agente(s) |
+| `-A, --all` | Selecionar todos os agentes |
+
+### Exemplos
+
+```bash
+agents-cli install                     # Interativo (modo projeto)
+agents-cli install -g                 # Interativo (modo global)
+agents-cli install -g -a code-reviewer # Instalar específico no global
+agents-cli install -A -g              # Instalar todos no global
+agents-cli install -a code-reviewer docs-writer security-auditor
+agents-cli remove -a code-reviewer
+agents-cli list
+agents-cli check
+```
 
 O CLI usa **symlinks** ao invés de copiar arquivos:
 - Agentes estão sempre atualizados com o repositório
 - Basta executar `git pull` para atualizar todos os agentes
 - Não precisa de backup
-
-Consulte [cli/README.md](cli/README.md) para detalhes.
 
 ---
 
@@ -88,25 +105,26 @@ opencode-agents-library/
 │   │   ├── documentation/
 │   │   ├── code-review/
 │   │   └── creation/
+│   ├── cli/                 # Código fonte do CLI
+│   │   └── index.js
 │   ├── shared/              # Prompts e configurações compartilhados
 │   │   ├── prompts/
 │   │   ├── configs/
-│   │   └── templates/       # Templates de desenvolvimento
+│   │   └── templates/
 │   └── scripts/             # Scripts utilitários
-├── cli/                     # CLI manager (Node.js)
-│   ├── install.js           # Ponto de entrada
-│   └── package.json
+├── bin/
+│   └── agents.js             # Ponto de entrada do CLI
+├── package.json              # Configuração do pacote npm
 ├── docs/                    # Documentação
-├── reference/              # Materiais de referência
-├── .github/                # Workflows do GitHub
-└── agents.json              # Índice de agentes
+├── reference/               # Materiais de referência
+└── agents.json             # Índice de agentes
 ```
 
 ---
 
 ## Criando Novos Agentes
 
-Consulte [Development Guide](docs/DEVELOPMENT.md) para instruções completas.
+Consulte o [Guia de Desenvolvimento](docs/DEVELOPMENT.md) para instruções completas.
 
 **Resumo:**
 1. Use `@agent-generator crie um novo agente` para começar
