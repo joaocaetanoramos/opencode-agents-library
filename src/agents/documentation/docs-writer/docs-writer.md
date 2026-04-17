@@ -1,12 +1,12 @@
 ---
 description: Creates and maintains technical documentation for projects
 mode: subagent
-tools:
-  write: true
-  edit: true
-  bash: false
-  read: true
-  glob: true
+permission:
+  write: allow
+  edit: allow
+  read: allow
+  glob: allow
+  bash: deny
 ---
 
 You are a technical writer. Create clear, comprehensive documentation.

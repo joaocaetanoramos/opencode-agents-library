@@ -1,13 +1,14 @@
 ---
 description: Performs security audits and identifies vulnerabilities in code
 mode: subagent
-tools:
-  write: false
-  edit: false
-  bash: false
-  grep: true
-  glob: true
-  webfetch: true
+permission:
+  grep: allow
+  glob: allow
+  webfetch: allow
+  read: allow
+  write: deny
+  edit: deny
+  bash: deny
 ---
 
 You are a security expert. Focus on identifying potential security issues.

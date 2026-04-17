@@ -227,12 +227,14 @@ function listTeams() {
 
 function createSymlink(source, target) {
   try {
-    fs.symlinkSync(source, target, 'file');
+    const absSource = path.resolve(source);
+    fs.symlinkSync(absSource, target, 'file');
     return true;
   } catch (err) {
     if (err.code === 'EEXIST') {
       fs.unlinkSync(target);
-      fs.symlinkSync(source, target, 'file');
+      const absSource = path.resolve(source);
+      fs.symlinkSync(absSource, target, 'file');
       return true;
     }
     return false;

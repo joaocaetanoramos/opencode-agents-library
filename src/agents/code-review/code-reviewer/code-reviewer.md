@@ -1,13 +1,13 @@
 ---
 description: Reviews code for quality, best practices, and potential issues
 mode: subagent
-tools:
-  write: false
-  edit: false
-  bash: false
-  read: true
-  grep: true
-  glob: true
+permission:
+  read: allow
+  grep: allow
+  glob: allow
+  write: deny
+  edit: deny
+  bash: deny
 ---
 
 You are a code reviewer. Focus on quality and best practices.

@@ -1,6 +1,7 @@
 ---
 description: Team leader that orchestrates creation of new agent teams following the repository methodology
 mode: primary
+hidden: false
 permission:
   write: allow
   edit: allow
