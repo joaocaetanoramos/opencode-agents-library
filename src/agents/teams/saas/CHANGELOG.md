@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [v0.1] - 2026-04-17
 
 ### Added
-- Team leader: `saas-project-generator.md`
+- Team leader: `saas-build.md` (renamed from saas-project-generator.md)
 - Team file: `saas.team.md`
 - Documentation moved to `docs/` directory
 - Integration with modular agents from other domains
@@ -40,5 +40,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Upgrading to v0.1 (from monolithic saas/ domain)
 - Agents are now in: `planning/`, `coding/`, `code-review/`
-- Team leader is in: `teams/saas/saas-project-generator.md`
+- Team leader is in: `teams/saas/saas-build.md`
 - Install via: `opencode team install saas`

@@ -5,7 +5,7 @@
 
 ## Agent Info
 - **Domain:** teams/saas
-- **Team Leader:** saas-project-generator
+- **Team Leader:** saas-build
 - **Repository:** opencode-agents-library
 - **Started:** 2026-04-17
 
@@ -28,7 +28,7 @@
 
 | Component | Type | Purpose | Status |
 |-----------|------|---------|--------|
-| `saas-project-generator` | Team Leader | Orchestrates team, conducts interview | ✅ Created |
+| `saas-build` | Team Leader | Orchestrates team, conducts interview | ✅ Renamed |
 | `saas.team.md` | Team File | Defines team composition for CLI | 🟡 Drafting |
 | `docs/SAAS-GENERATOR-DISCOVERY.md` | Documentation | Architecture and design | ✅ Moved |
 | `docs/available-tools.md` | Documentation | Tool registry | ✅ Moved |
@@ -49,16 +49,16 @@
 
 ### Version v0.1
 - [x] Define multi-agent architecture in discovery
-- [x] Create saas-project-generator (team leader)
+- [x] Create saas-build (team leader) - renamed from saas-project-generator
 - [x] Create saas.team.md (team file)
 - [x] Move documentation to team directory
 - [x] Adapt modular agents (architect, code-generator, sdd-compliance)
-- [ ] Update agents.json
-- [ ] Update CLI for team support
+- [x] Update agents.json
+- [x] Update CLI for team support
 - [ ] Test with sample SaaS project
 
 ### Future Versions
-- [ ] v0.2: Add test-generator to team
+- [ ] v0.2: Add test-generator to team (completed in v0.1)
 - [ ] v0.3: Add code-reviewer integration
 - [ ] v1.0: First stable release
 
@@ -81,7 +81,7 @@
 - Team file enables one-command installation
 
 **Key files:**
-- `saas-project-generator.md` - Team leader
+- `saas-build.md` - Team leader
 - `saas.team.md` - Team file for CLI
 - `docs/SAAS-GENERATOR-DISCOVERY.md` - Architecture decisions
 - `docs/available-tools.md` - Tool registry
@@ -89,8 +89,7 @@
 ---
 
 ## Blockers
-- Need to update agents.json
-- Need to update CLI for team support
+- None
 
 ---
 

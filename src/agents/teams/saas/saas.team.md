@@ -1,7 +1,7 @@
 ---
 description: Complete SaaS project development team - orchestrates requirements analysis, architecture, coding, review and documentation
 version: 1.0.0
-team_leader: saas-project-generator
+team_leader: saas-build
 ---
 
 # SaaS Development Team
@@ -13,7 +13,7 @@ This team file defines the composition and workflow for the SaaS project develop
 ### Team Leader
 | Agent | File | Purpose |
 |-------|------|---------|
-| `saas-project-generator` | `src/agents/teams/saas/saas-project-generator.md` | Orchestrates team, conducts interview |
+| `saas-build` | `src/agents/teams/saas/saas-build.md` | Orchestrates team, conducts interview |
 
 ### Agents (from modular domains)
 
@@ -31,7 +31,7 @@ This team file defines the composition and workflow for the SaaS project develop
 User
   │
   ▼
-saas-project-generator (Team Leader)
+saas-build (Team Leader)
   │
   ├──► requirements-analyzer ───► Requirements Document
   │
@@ -61,7 +61,7 @@ saas-project-generator (Team Leader)
 opencode team install saas
 
 # This will install:
-# - saas-project-generator (team leader)
+# - saas-build (team leader)
 # - requirements-analyzer (from planning/)
 # - architect (from planning/)
 # - code-generator (from coding/)
@@ -72,7 +72,7 @@ opencode team install saas
 ## Files
 
 ### Team Leader
-- `src/agents/teams/saas/saas-project-generator.md`
+- `src/agents/teams/saas/saas-build.md`
 
 ### Team Documentation
 - `src/agents/teams/saas/docs/SAAS-GENERATOR-DISCOVERY.md`

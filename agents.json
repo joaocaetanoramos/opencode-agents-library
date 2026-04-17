@@ -52,7 +52,7 @@
   "teams": {
     "saas": {
       "path": "src/agents/teams/saas",
-      "team_leader": "saas-project-generator",
+      "team_leader": "saas-build",
       "team_file": "saas.team.md",
       "description": "Complete SaaS project development team",
       "agents": ["architect", "requirements-analyzer", "code-generator", "test-generator", "sdd-compliance"]
