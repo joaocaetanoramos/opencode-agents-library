@@ -1,6 +1,6 @@
 # Biblioteca de Agentes OpenCode
 
-Uma coleção curada de agentes personalizados para o [OpenCode](https://opencode.ai), organizados por domínio e seguindo princípios SOLID.
+Uma coleção curada de agentes e times personalizados para o [OpenCode](https://opencode.ai), organizados por domínio seguindo princípios SOLID e padrões de Clean Code.
 
 **Idioma:** [English](./README.md) | [Português](./README.pt-BR.md)
 
@@ -42,10 +42,21 @@ agents-cli
 | Comando | Descrição |
 |---------|-----------|
 | `agents-cli install` | Instalar agentes (interativo ou especificado) |
+| `agents-cli team install` | Instalar times completos |
+| `agents-cli team list` | Listar times disponíveis |
 | `agents-cli remove` | Remover agentes instalados |
 | `agents-cli list` | Listar todos os agentes disponíveis e instalados |
 | `agents-cli check` | Verificar status do OpenCode |
 | `agents-cli help` | Mostrar ajuda |
+
+### Comandos de Time
+
+| Comando | Descrição |
+|---------|-----------|
+| `agents-cli team list` | Listar todos os times disponíveis |
+| `agents-cli team install saas` | Instalar time SaaS |
+| `agents-cli team install saas-builder-docker` | Instalar time SaaS com Docker/Dokploy |
+| `agents-cli team install team-builder` | Instalar time de criação de times |
 
 ### Opções
 
@@ -62,11 +73,10 @@ agents-cli
 agents-cli install                     # Interativo (modo projeto)
 agents-cli install -g                 # Interativo (modo global)
 agents-cli install -g -a code-reviewer # Instalar específico no global
-agents-cli install -A -g              # Instalar todos no global
-agents-cli install -a code-reviewer docs-writer security-auditor
+agents-cli team install saas           # Instalar time SaaS
+agents-cli team install saas-builder-docker -g  # Instalar time Docker no global
 agents-cli remove -a code-reviewer
 agents-cli list
-agents-cli check
 ```
 
 O CLI usa **symlinks** ao invés de copiar arquivos:
@@ -78,12 +88,25 @@ O CLI usa **symlinks** ao invés de copiar arquivos:
 
 ## Agentes Disponíveis
 
-| Agente | Domínio | Descrição |
-|--------|---------|-----------|
-| `security-auditor` | security | Identifica vulnerabilidades e riscos de segurança |
-| `docs-writer` | documentation | Cria e mantém documentação técnica |
-| `code-reviewer` | code-review | Revisa código quanto à qualidade e boas práticas |
-| `agent-generator` | creation | Gera novos agentes seguindo a metodologia do repositório |
+### Por Domínio
+
+| Domínio | Agentes |
+|---------|---------|
+| **security** | `security-auditor` |
+| **documentation** | `docs-writer` |
+| **code-review** | `code-reviewer`, `sdd-compliance` |
+| **planning** | `architect`, `requirements-analyzer` |
+| **coding** | `code-generator`, `test-generator` |
+| **creation** | `agent-builder` |
+| **infrastructure** | `docker-specialist` |
+
+### Times
+
+| Time | Descrição | Agentes |
+|------|-----------|---------|
+| **saas** | Time completo de desenvolvimento SaaS | architect, code-generator, sdd-compliance + mais |
+| **saas-builder-docker** | SaaS com deploy Docker/Dokploy | Todos os agentes do saas + docker-specialist |
+| **team-builder** | Meta-time para criar novos times | agent-builder, architect, docs-writer |
 
 ---
 
@@ -100,24 +123,26 @@ Este repositório contém **arquivos de desenvolvimento** (STATUS.md, CHANGELOG.
 ```
 opencode-agents-library/
 ├── src/
-│   ├── agents/              # Definições de agentes por domínio
-│   │   ├── security/
-│   │   ├── documentation/
-│   │   ├── code-review/
-│   │   └── creation/
-│   ├── cli/                 # Código fonte do CLI
-│   │   └── index.js
-│   ├── shared/              # Prompts e configurações compartilhados
-│   │   ├── prompts/
-│   │   ├── configs/
-│   │   └── templates/
-│   └── scripts/             # Scripts utilitários
+│   ├── agents/
+│   │   ├── security/           # Agentes de segurança
+│   │   ├── documentation/      # Agentes de documentação
+│   │   ├── code-review/        # Agentes de revisão de código
+│   │   ├── planning/           # Agentes de planejamento
+│   │   ├── coding/             # Agentes de codificação
+│   │   ├── creation/           # Criação de agentes
+│   │   ├── infrastructure/     # Agentes de infraestrutura
+│   │   └── teams/              # Times pré-configurados
+│   │       ├── saas/
+│   │       ├── saas-builder-docker/
+│   │       └── team-builder/
+│   ├── cli/                    # Código fonte do CLI
+│   ├── shared/                 # Prompts e configurações compartilhados
+│   └── scripts/                # Scripts utilitários
 ├── bin/
-│   └── agents.js             # Ponto de entrada do CLI
-├── package.json              # Configuração do pacote npm
-├── docs/                    # Documentação
-├── reference/               # Materiais de referência
-└── agents.json             # Índice de agentes
+│   └── agents.js               # Ponto de entrada do CLI
+├── docs/                      # Documentação
+├── package.json
+└── agents.json                # Índice de agentes e times
 ```
 
 ---
@@ -127,11 +152,41 @@ opencode-agents-library/
 Consulte o [Guia de Desenvolvimento](docs/DEVELOPMENT.md) para instruções completas.
 
 **Resumo:**
-1. Use `@agent-generator crie um novo agente` para começar
-2. Ou crie manualmente `src/agents/[domínio]/[nome-do-agente].md`
+1. Use `@agent-builder create a new agent` para começar
+2. Ou crie manualmente o agente em `src/agents/[domínio]/[nome-do-agente]/`
 3. Siga o schema `permission` (não o deprecated `tools`)
-4. Use `STATUS.md` e `CHANGELOG.md` para acompanhar o desenvolvimento
+4. Crie `STATUS.md` e `CHANGELOG.md` para acompanhar o desenvolvimento
 5. Execute `./scripts/validate.sh` para verificar
+
+---
+
+## Estrutura de Arquivos do Agente
+
+Cada agente tem sua própria subpasta:
+
+```
+src/agents/{domínio}/{nome-do-agente}/
+├── {nome-do-agente}.md    # Arquivo principal do agente (instalado)
+├── STATUS.md              # Acompanhamento de desenvolvimento
+└── CHANGELOG.md           # Histórico de versão
+```
+
+---
+
+## Estrutura de Time
+
+Times têm documentação adicional:
+
+```
+src/agents/teams/{nome-do-time}/
+├── {nome-do-time}.md           # Líder do time (instalado)
+├── {nome-do-time}.team.md     # Arquivo do time (para CLI)
+├── STATUS.md
+├── CHANGELOG.md
+└── docs/
+    ├── OVERVIEW.md            # Documentação do time
+    └── available-tools.md    # Ferramentas disponíveis para o time
+```
 
 ---
 

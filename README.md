@@ -1,8 +1,8 @@
 # OpenCode Agents Library
 
-A curated collection of custom agents for [OpenCode](https://opencode.ai), organized by domain and following SOLID principles.
+A curated collection of custom agents and teams for [OpenCode](https://opencode.ai), organized by domain following SOLID principles and Clean Code standards.
 
-**Language:** [English](./README.md) | [Português](./README.pt-BR.md)
+**Languages:** [English](./README.md) | [Português](./README.pt-BR.md)
 
 ---
 
@@ -42,10 +42,21 @@ agents-cli
 | Command | Description |
 |---------|-------------|
 | `agents-cli install` | Install agents (interactive or specified) |
+| `agents-cli team install` | Install complete teams |
+| `agents-cli team list` | List available teams |
 | `agents-cli remove` | Remove installed agents |
 | `agents-cli list` | List all available and installed agents |
 | `agents-cli check` | Check OpenCode status |
 | `agents-cli help` | Show help |
+
+### Team Commands
+
+| Command | Description |
+|---------|-------------|
+| `agents-cli team list` | List all available teams |
+| `agents-cli team install saas` | Install SaaS team |
+| `agents-cli team install saas-builder-docker` | Install SaaS with Docker/Dokploy |
+| `agents-cli team install team-builder` | Install team builder |
 
 ### Options
 
@@ -62,11 +73,10 @@ agents-cli
 agents-cli install                     # Interactive (project mode)
 agents-cli install -g                 # Interactive (global mode)
 agents-cli install -g -a code-reviewer # Install specific to global
-agents-cli install -A -g               # Install all to global
-agents-cli install -a code-reviewer docs-writer security-auditor
+agents-cli team install saas           # Install SaaS team
+agents-cli team install saas-builder-docker -g  # Install Docker team to global
 agents-cli remove -a code-reviewer
 agents-cli list
-agents-cli check
 ```
 
 The CLI uses **symlinks** instead of copying files:
@@ -78,12 +88,25 @@ The CLI uses **symlinks** instead of copying files:
 
 ## Available Agents
 
-| Agent | Domain | Description |
-|-------|--------|-------------|
-| `security-auditor` | security | Identifies security vulnerabilities and risks |
-| `docs-writer` | documentation | Creates and maintains technical documentation |
-| `code-reviewer` | code-review | Reviews code for quality and best practices |
-| `agent-generator` | creation | Generates new agents following repository methodology |
+### By Domain
+
+| Domain | Agents |
+|--------|--------|
+| **security** | `security-auditor` |
+| **documentation** | `docs-writer` |
+| **code-review** | `code-reviewer`, `sdd-compliance` |
+| **planning** | `architect`, `requirements-analyzer` |
+| **coding** | `code-generator`, `test-generator` |
+| **creation** | `agent-builder` |
+| **infrastructure** | `docker-specialist` |
+
+### Teams
+
+| Team | Description | Agents |
+|------|-------------|--------|
+| **saas** | Complete SaaS development team | architect, code-generator, sdd-compliance + more |
+| **saas-builder-docker** | SaaS with Docker/Dokploy deployment | All saas agents + docker-specialist |
+| **team-builder** | Meta-team for creating new teams | agent-builder, architect, docs-writer |
 
 ---
 
@@ -100,24 +123,26 @@ This repository contains **development files** (STATUS.md, CHANGELOG.md) and **a
 ```
 opencode-agents-library/
 ├── src/
-│   ├── agents/              # Agent definitions by domain
-│   │   ├── security/
-│   │   ├── documentation/
-│   │   ├── code-review/
-│   │   └── creation/
-│   ├── cli/                  # CLI source code
-│   │   └── index.js
-│   ├── shared/               # Shared prompts and configs
-│   │   ├── prompts/
-│   │   ├── configs/
-│   │   └── templates/
-│   └── scripts/              # Utility scripts
+│   ├── agents/
+│   │   ├── security/           # Security agents
+│   │   ├── documentation/      # Documentation agents
+│   │   ├── code-review/         # Code review agents
+│   │   ├── planning/            # Planning agents
+│   │   ├── coding/              # Coding agents
+│   │   ├── creation/            # Agent creation
+│   │   ├── infrastructure/      # Infrastructure agents
+│   │   └── teams/               # Pre-configured teams
+│   │       ├── saas/
+│   │       ├── saas-builder-docker/
+│   │       └── team-builder/
+│   ├── cli/                     # CLI source code
+│   ├── shared/                  # Shared prompts and configs
+│   └── scripts/                 # Utility scripts
 ├── bin/
-│   └── agents.js             # CLI entry point
-├── package.json              # npm package config
-├── docs/                    # Documentation
-├── reference/               # External reference materials
-└── agents.json             # Agent index
+│   └── agents.js                # CLI entry point
+├── docs/                        # Documentation
+├── package.json
+└── agents.json                  # Agent and team index
 ```
 
 ---
@@ -127,11 +152,41 @@ opencode-agents-library/
 See [Development Guide](docs/DEVELOPMENT.md) for complete instructions.
 
 **Quick Summary:**
-1. Use `@agent-generator create a new agent` to get started
-2. Or manually create `src/agents/[domain]/[agent-name].md`
+1. Use `@agent-builder create a new agent` to get started
+2. Or manually create agent in `src/agents/[domain]/[agent-name]/`
 3. Follow the `permission` schema (not deprecated `tools`)
-4. Use `STATUS.md` and `CHANGELOG.md` to track development
+4. Create `STATUS.md` and `CHANGELOG.md` to track development
 5. Run `./scripts/validate.sh` to verify
+
+---
+
+## Agent File Structure
+
+Each agent has its own subfolder:
+
+```
+src/agents/{domain}/{agent-name}/
+├── {agent-name}.md    # Main agent file (installed)
+├── STATUS.md          # Development tracking
+└── CHANGELOG.md       # Version history
+```
+
+---
+
+## Team Structure
+
+Teams have additional documentation:
+
+```
+src/agents/teams/{team-name}/
+├── {team-name}.md           # Team leader (installed)
+├── {team-name}.team.md     # Team file (for CLI)
+├── STATUS.md
+├── CHANGELOG.md
+└── docs/
+    ├── OVERVIEW.md         # Team documentation
+    └── available-tools.md  # Tools available to team
+```
 
 ---
 
