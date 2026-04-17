@@ -44,82 +44,17 @@ For each technology in the stack, use webfetch to get relevant implementation de
 
 ### Step 3: Create Project Structure
 
-Create all necessary files following the feature-based SOLID structure:
+Create project structure following the SDD's architecture. The SDD specifies the exact project structure to generate. Follow it exactly.
 
 ```
-{project-name}/
-├── package.json
-├── tsconfig.json
-├── next.config.js (or similar)
-├── .env.example
-├── README.md
-├── eslint.config.js
-├── prettier.config.js
-├── src/
-│   ├── app/
-│   │   ├── (auth)/
-│   │   │   ├── login/
-│   │   │   └── signup/
-│   │   ├── (dashboard)/
-│   │   │   ├── _components/
-│   │   │   └── page.tsx
-│   │   └── api/
-│   │       └── [...routes]/
-│   ├── features/
-│   │   ├── auth/
-│   │   │   ├── auth.service.ts
-│   │   │   ├── auth.controller.ts
-│   │   │   ├── auth.repository.ts
-│   │   │   └── auth.types.ts
-│   │   └── [other features]/
-│   ├── shared/
-│   │   ├── lib/
-│   │   │   ├── db.ts
-│   │   │   └── logger.ts
-│   │   ├── types/
-│   │   │   └── index.ts
-│   │   └── utils/
-│   │       ├── format-date.ts
-│   │       └── validation.ts
-│   └── components/
-│       └── ui/
-├── prisma/
-│   └── schema.prisma
-└── tests/
-    ├── unit/
-    └── integration/
+[Project structure from SDD - can be any stack]
 ```
 
 ### Step 4: Implement Each Feature
 
-For each feature in the SDD:
+For each feature in the SDD, follow the layered architecture defined in the SDD (service, controller, repository pattern or similar).
 
-**Service Layer (Business Logic)**
-```typescript
-// features/{feature}/{feature}.service.ts
-// Single Responsibility - one service per feature
-// Pure business logic, no HTTP concerns
-```
-
-**Controller Layer (HTTP)**
-```typescript
-// features/{feature}/{feature}.controller.ts
-// Thin layer - only handles HTTP
-// Delegates to service
-```
-
-**Repository Layer (Data Access)**
-```typescript
-// features/{feature}/{feature}.repository.ts
-// Only data access logic
-// No business rules
-```
-
-**Types**
-```typescript
-// features/{feature}/{feature}.types.ts
-// All TypeScript interfaces for this feature
-```
+The code patterns (Service/Controller/Repository or similar) will be specified in the SDD. Do not assume a specific language or framework.
 
 ### Step 5: Follow SOLID Principles
 
@@ -156,13 +91,14 @@ Create all project files in the specified directory. Report completion with:
 - Total files created: [N]
 - Total lines: [N]
 - Features implemented: [list]
+- Technology stack: [from SDD]
 
 ## Next Steps
 
-1. Run `npm install` to install dependencies
+1. Install dependencies (command from SDD)
 2. Configure environment variables in `.env`
-3. Run `npx prisma db push` to create database
-4. Run `npm run dev` to start development server
+3. Initialize database (command from SDD)
+4. Run development server (command from SDD)
 ```
 
 ## Important Guidelines

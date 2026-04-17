@@ -43,13 +43,30 @@ Based on the requirements, select appropriate tools for each category:
 | Category | Considerations |
 |----------|----------------|
 | Frontend | SSR needs, SEO requirements, team familiarity |
+| Backend | Language, framework, performance requirements |
 | Database | Relational vs document, scaling needs |
 | Auth | Built-in vs external, SSO requirements |
 | Billing | Real provider vs mock for MVP |
 | UI | Component library needs |
-| Deployment | Serverless vs containers |
+| Deployment | Serverless vs containers vs VMs |
+| Container | Docker, Docker Compose, container orchestration |
 
-### Step 3: Consult Documentation
+### Step 3: Consider Docker/Container Strategy
+
+If deployment is container-based (recommended for SaaS), include Docker strategy in the SDD:
+
+```yaml
+## Container Strategy
+
+| Service | Base Image | Purpose |
+|---------|------------|---------|
+| backend | [language image] | API server |
+| frontend | [Node/nginx image] | Static files + SSR |
+| db | postgres:15 | Database |
+| redis | redis:7 | Caching |
+```
+
+### Step 5: Consult Documentation
 
 For each selected tool, use webfetch to consult its sitemap and find relevant documentation pages:
 
@@ -60,7 +77,7 @@ For each selected tool, use webfetch to consult its sitemap and find relevant do
 4. Record the exact URLs
 ```
 
-### Step 4: Generate SDD
+### Step 6: Generate SDD
 
 Create a comprehensive Software Design Document in YAML format:
 
@@ -77,11 +94,13 @@ Create a comprehensive Software Design Document in YAML format:
 | Category | Tool | Version | Rationale |
 |----------|------|---------|-----------|
 | Frontend | [tool] | [version] | [why this choice] |
+| Backend | [tool] | [version] | [why this choice] |
 | Database | [tool] | [version] | [why this choice] |
 | Auth | [tool] | [version] | [why this choice] |
 | Billing | [tool] | [version] | [why this choice] |
 | UI | [tool] | [version] | [why this choice] |
 | Deployment | [tool] | [version] | [why this choice] |
+| Container | [tool] | [version] | [why this choice] |
 
 ## Features
 
@@ -103,6 +122,12 @@ Create a comprehensive Software Design Document in YAML format:
 
 ```prisma
 [Prisma schema if applicable]
+```
+
+## Container Strategy
+
+```yaml
+[Docker/Container configuration - services, images, ports, volumes]
 ```
 
 ## Documentation References

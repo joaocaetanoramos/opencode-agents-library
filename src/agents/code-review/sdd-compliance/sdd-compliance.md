@@ -30,49 +30,41 @@ Parse the SDD to understand:
 
 ### Step 2: Verify Project Structure
 
-Check that all required files exist:
+Check that all required files from the SDD exist. The SDD specifies the exact project structure that should be generated.
 
 ```
 Required Files:
-- package.json
-- tsconfig.json
-- .env.example
-- src/app/... (Next.js structure)
-- src/features/... (feature modules)
-- src/shared/... (shared utilities)
-- prisma/schema.prisma (if using database)
-- tests/... (test structure)
+[From SDD - project structure section]
 ```
 
 ### Step 3: Verify Feature Implementation
 
 For each feature in the SDD, verify:
 
-| Feature | Check |
-|---------|-------|
-| Auth | auth.service.ts, auth.controller.ts, auth.repository.ts exist |
-| Billing | billing service handles subscriptions |
-| Multi-tenancy | tenant context middleware exists |
+```
+[Features from SDD - check they exist as specified]
+```
 
 ### Step 4: Check SOLID Compliance
 
 Use bash to inspect code structure:
 
 ```
-1. Each feature has its own directory
-2. Service files have single responsibility
-3. No god classes or files > 200 lines
-4. Dependencies go in one direction (controller → service → repository)
+1. Each feature has its own directory/module
+2. Service/layer files have single responsibility
+3. No god classes or files exceed recommended line limit
+4. Dependencies go in one direction (layered architecture)
 ```
 
 ### Step 5: Verify Technology Stack
 
-Check package.json for correct dependencies:
+Check that the generated project uses the technologies specified in the SDD:
 - Frontend framework
 - Database client
 - Auth library
 - Billing integration
 - UI components
+- Testing framework
 
 ### Step 6: Check Clean Code Standards
 
