@@ -45,13 +45,21 @@ function getAvailableAgents() {
   const domains = fs.readdirSync(AGENTS_SOURCE, { withFileTypes: true });
   for (const domain of domains) {
     if (!domain.isDirectory()) continue;
-    const agentDir = path.join(AGENTS_SOURCE, domain.name);
-    const files = fs.readdirSync(agentDir);
+    const domainPath = path.join(AGENTS_SOURCE, domain.name);
+    const entries = fs.readdirSync(domainPath, { withFileTypes: true });
 
-    for (const file of files) {
-      if (file.endsWith('.md') && file !== 'STATUS.md' && file !== 'CHANGELOG.md') {
-        const agentName = path.basename(file, '.md');
-        agents.push({ name: agentName, domain: domain.name });
+    for (const entry of entries) {
+      if (entry.isDirectory()) {
+        const agentPath = path.join(domainPath, entry.name);
+        const agentFile = path.join(agentPath, `${entry.name}.md`);
+        if (fs.existsSync(agentFile)) {
+          agents.push({ name: entry.name, domain: domain.name });
+        }
+      } else if (entry.name.endsWith('.md') && !['STATUS.md', 'CHANGELOG.md'].includes(entry.name)) {
+        const agentName = path.basename(entry.name, '.md');
+        if (agentName !== 'STATUS' && agentName !== 'CHANGELOG') {
+          agents.push({ name: agentName, domain: domain.name });
+        }
       }
     }
   }
@@ -168,7 +176,7 @@ async function installTeam(teamName, options = {}) {
 
       for (const [domain, config] of Object.entries(agentsConfig.domains)) {
         if (config.agents && config.agents.includes(agentName)) {
-          agentPath = path.join(REPO_ROOT, config.path, `${agentName}.md`);
+          agentPath = path.join(REPO_ROOT, config.path, agentName, `${agentName}.md`);
           agentDomain = domain;
           break;
         }
@@ -295,7 +303,7 @@ async function installAgentsGlobal(selectedAgents = null) {
       failed++;
       continue;
     }
-    const source = path.join(AGENTS_SOURCE, agent.domain, `${agentName}.md`);
+    const source = path.join(AGENTS_SOURCE, agent.domain, agentName, `${agentName}.md`);
     const target = path.join(GLOBAL_DIR, `${agentName}.md`);
 
     if (fs.existsSync(source)) {
@@ -366,7 +374,7 @@ async function installAgentsProject(selectedAgents = null) {
       failed++;
       continue;
     }
-    const source = path.join(AGENTS_SOURCE, agent.domain, `${agentName}.md`);
+    const source = path.join(AGENTS_SOURCE, agent.domain, agentName, `${agentName}.md`);
     const target = path.join(PROJECT_DIR, `${agentName}.md`);
 
     if (fs.existsSync(source)) {

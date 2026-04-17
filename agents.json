@@ -40,8 +40,8 @@
     },
     "creation": {
       "path": "src/agents/creation",
-      "description": "Agent creation and generation following repository methodology",
-      "agents": ["agent-generator"]
+      "description": "Agent and team creation following repository methodology",
+      "agents": ["agent-builder"]
     },
     "teams": {
       "path": "src/agents/teams",
@@ -56,6 +56,13 @@
       "team_file": "saas.team.md",
       "description": "Complete SaaS project development team",
       "agents": ["architect", "requirements-analyzer", "code-generator", "test-generator", "sdd-compliance"]
+    },
+    "team-builder": {
+      "path": "src/agents/teams/team-builder",
+      "team_leader": "team-builder",
+      "team_file": "team-builder.team.md",
+      "description": "Meta-team that creates new agent teams",
+      "agents": ["agent-builder", "architect", "docs-writer"]
     }
   },
   "shared": {

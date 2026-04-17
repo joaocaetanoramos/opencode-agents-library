@@ -1,9 +1,23 @@
-# Agent Generator - Changelog
+# Agent Builder - Changelog
 
 All notable changes to this agent are documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [v0.2] - 2026-04-17
+
+### Changed
+- Renamed from agent-generator to agent-builder
+- Moved to nested folder structure: `creation/agent-builder/`
+
+### Design Decisions
+
+#### v0.2
+- **Decision:** Rename to agent-builder for consistency
+- **Reason:** "Builder" is more appropriate than "generator" for repository methodology
+
+---
 
 ## [v0.1] - 2026-04-16
 
@@ -16,7 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Design Decisions
 
-### v0.1
+#### v0.1
 - **Decision:** Single agent instead of Plan/Build split
 - **Reason:** OpenCode already has Tab to switch modes. Redundant to replicate. Better to have focused agent on creation.
 
@@ -29,6 +43,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ---
 
 ## Migration Notes
+
+### Upgrading to v0.2
+- Change references from `agent-generator` to `agent-builder`
+- Agent ID remains the same for CLI purposes
 
 ### Upgrading to v0.1
 First release. No migration needed.
