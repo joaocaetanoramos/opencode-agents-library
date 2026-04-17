@@ -43,6 +43,11 @@
       "description": "Agent and team creation following repository methodology",
       "agents": ["agent-builder"]
     },
+    "infrastructure": {
+      "path": "src/agents/infrastructure",
+      "description": "Infrastructure and deployment (Docker, Kubernetes, CI/CD)",
+      "agents": ["docker-specialist"]
+    },
     "teams": {
       "path": "src/agents/teams",
       "description": "Pre-configured agent teams with team leaders",
@@ -63,6 +68,13 @@
       "team_file": "team-builder.team.md",
       "description": "Meta-team that creates new agent teams",
       "agents": ["agent-builder", "architect", "docs-writer"]
+    },
+    "saas-builder-docker": {
+      "path": "src/agents/teams/saas-builder-docker",
+      "team_leader": "saas-builder-docker",
+      "team_file": "saas-builder-docker.team.md",
+      "description": "SaaS team with Docker and Dokploy deployment support",
+      "agents": ["architect", "requirements-analyzer", "code-generator", "test-generator", "sdd-compliance", "docker-specialist"]
     }
   },
   "shared": {
